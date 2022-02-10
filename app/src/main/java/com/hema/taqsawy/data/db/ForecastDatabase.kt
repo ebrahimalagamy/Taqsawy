@@ -14,7 +14,8 @@ import com.hema.taqsawy.data.db.pojo.weatherModel.WeatherDao
     version = 1,
     exportSchema = false
 )
-abstract class DataBase : RoomDatabase() {
+abstract class ForecastDatabase : RoomDatabase() {
+
     abstract fun weatherDao(): WeatherDao
     abstract fun favoriteDao(): FavoriteDao
     abstract fun alarmDao(): AlarmDao

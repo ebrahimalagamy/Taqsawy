@@ -1,14 +1,12 @@
 package com.hema.taqsawy.data.db
 
-import android.app.Application
+import android.content.Context
 import androidx.room.Room
 
 object LocalSourceDB {
-    fun getInstance(application: Application): DataBase {
+    fun getInstance(context: Context): ForecastDatabase {
         return Room.databaseBuilder(
-            application,
-            DataBase::class.java,
-            "WeatherDataBase"
+            context, ForecastDatabase::class.java, "WeatherDataBase"
         )
             .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
