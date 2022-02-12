@@ -43,7 +43,7 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun onClick(lat: String, lng: String) {
-        val latLng = listOf<String>(lat, lng)
+        val latLng = listOf(lat, lng)
         navigate.value = latLng
     }
 

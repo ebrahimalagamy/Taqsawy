@@ -7,7 +7,7 @@ import com.hema.taqsawy.data.db.ForecastDatabase
 import com.hema.taqsawy.data.db.alarmModel.AlarmModel
 import com.hema.taqsawy.data.db.favoritePlacesModel.FavoriteModel
 import com.hema.taqsawy.data.db.weatherModel.CurrentWeatherModel
-import com.hema.taqsawy.data.network.RetrofitInstance
+import com.hema.taqsawy.data.network.WeatherClient
 import com.hema.taqsawy.internal.Constants.Companion.API_KEY
 import com.hema.taqsawy.internal.UnitSystem
 import com.hema.taqsawy.providers.SharedPreferencesProvider
@@ -32,22 +32,20 @@ class Repository(private val application: Application) {
 
         }
         CoroutineScope(Dispatchers.IO + exceptionHandlerException).launch {
-            if (latPref != null) {
-                if (unit == "imperial") {
-                    UnitSystem.tempUnit = application.getString(R.string.Feherinhite)
-                    UnitSystem.WindSpeedUnit = application.getString(R.string.mileshr)
-                } else if (unit == "metric") {
-                    UnitSystem.tempUnit = application.getString(R.string.celicious)
-                    UnitSystem.WindSpeedUnit = application.getString(R.string.mpers)
-                }
-                val response = RetrofitInstance.getWeatherService().getCurrentWeather(
-                    latPref, lngPref, "minutely", unit, language, API_KEY
-                )
+            if (unit == "imperial") {
+                UnitSystem.tempUnit = application.getString(R.string.Feherinhite)
+                UnitSystem.WindSpeedUnit = application.getString(R.string.mileshr)
+            } else if (unit == "metric") {
+                UnitSystem.tempUnit = application.getString(R.string.celicious)
+                UnitSystem.WindSpeedUnit = application.getString(R.string.mpers)
+            }
+            val response = WeatherClient.getWeatherService().getCurrentWeather(
+                latPref, lngPref, "minutely", unit, language, API_KEY
+            )
 
-                if (response.isSuccessful) {
-                    localWeatherDB.insert(response.body())
-                } else {
-                }
+            if (response.isSuccessful) {
+                localWeatherDB.insert(response.body())
+            } else {
             }
         }
         return localWeatherDB.getAll(latPref, lngPref)
@@ -55,11 +53,11 @@ class Repository(private val application: Application) {
 
     fun fetchDataForFavorite(favLat: String?, favLng: String?): LiveData<CurrentWeatherModel> {
 
-        val exceptionHandlerException = CoroutineExceptionHandler { _, t: Throwable ->
+        val exceptionHandlerException = CoroutineExceptionHandler { _, _: Throwable ->
         }
 
         CoroutineScope(Dispatchers.IO + exceptionHandlerException).launch {
-            val response = RetrofitInstance.getWeatherService()
+            val response = WeatherClient.getWeatherService()
                 .getCurrentWeather(favLat, favLng, "minutely", unit, language, API_KEY)
             if (response.isSuccessful) {
                 localWeatherDB.insert(response.body())
@@ -103,26 +101,24 @@ class Repository(private val application: Application) {
         runBlocking(Dispatchers.IO) {
             launch {
                 try {
-                    if (latPref != null) {
-                        if (unit == "imperial") {
-                            UnitSystem.tempUnit = application.getString(R.string.Feherinhite)
-                            UnitSystem.WindSpeedUnit = application.getString(R.string.mileshr)
-                        } else if (unit == "metric") {
-                            UnitSystem.tempUnit = application.getString(R.string.celicious)
-                            UnitSystem.WindSpeedUnit = application.getString(R.string.mpers)
-                        }
-                        val response = RetrofitInstance.getWeatherService()
-                            .getCurrentWeather(
-                                latPref,
-                                lngPref,
-                                "minutely",
-                                unit,
-                                language,
-                                API_KEY
-                            )
-                        if (response.isSuccessful) {
-                            localWeatherDB.insert(response.body())
-                        }
+                    if (unit == "imperial") {
+                        UnitSystem.tempUnit = application.getString(R.string.Feherinhite)
+                        UnitSystem.WindSpeedUnit = application.getString(R.string.mileshr)
+                    } else if (unit == "metric") {
+                        UnitSystem.tempUnit = application.getString(R.string.celicious)
+                        UnitSystem.WindSpeedUnit = application.getString(R.string.mpers)
+                    }
+                    val response = WeatherClient.getWeatherService()
+                        .getCurrentWeather(
+                            latPref,
+                            lngPref,
+                            "minutely",
+                            unit,
+                            language,
+                            API_KEY
+                        )
+                    if (response.isSuccessful) {
+                        localWeatherDB.insert(response.body())
                     }
                 } catch (e: Exception) {
                 }

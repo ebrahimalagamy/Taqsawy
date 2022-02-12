@@ -30,9 +30,7 @@ import java.util.*
 
 class AlarmFragment : Fragment() {
 
-    private var _binding: FragmentAlarmBinding? = null
-    private val binding get() = _binding!!
-
+    private lateinit var binding: FragmentAlarmBinding
     lateinit var sharedPref: SharedPreferencesProvider
 
     lateinit var alarmViewModel: AlarmViewModel
@@ -55,7 +53,7 @@ class AlarmFragment : Fragment() {
 
         sharedPref = SharedPreferencesProvider(requireContext())
 
-        _binding = FragmentAlarmBinding.inflate(inflater, container, false)
+        binding = FragmentAlarmBinding.inflate(inflater, container, false)
         alarmViewModel = ViewModelProvider.AndroidViewModelFactory
             .getInstance(requireActivity().application)
             .create(AlarmViewModel::class.java)
@@ -70,7 +68,6 @@ class AlarmFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.fabAlarm.setOnClickListener {
-            binding.fabAlarm.collapse(true)
             binding.emptyImage.visibility = View.GONE
             binding.emptyListTxt.visibility = View.GONE
             val customDialog = CustomDialogChooseFragment(alarmViewModel)
@@ -88,8 +85,6 @@ class AlarmFragment : Fragment() {
             alarmAdapter.setIncomingList(it)
             alarmList = it as MutableList<AlarmModel>
             if (it.isEmpty()) {
-                Log.d("listttttttttttt", it.size.toString())
-
                 binding.emptyImage.visibility = View.VISIBLE
                 binding.emptyListTxt.visibility = View.VISIBLE
                 binding.fabAlarm.visibility = View.VISIBLE
@@ -365,10 +360,5 @@ class AlarmFragment : Fragment() {
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

@@ -28,16 +28,10 @@ class FavoriteFragment : Fragment() {
     private lateinit var favoriteAdapter: FavoriteAdapter
     private lateinit var favoriteViewModel: FavoriteViewModel
     private lateinit var intent: Intent
-
-    var latDecimal: BigDecimal? = null
-    var lonDecimal: BigDecimal? = null
-    var address: String? = null
-
-    lateinit var sharedPref: SharedPreferencesProvider
-
-    private lateinit var latit: String
-    private lateinit var longit: String
-
+    private var latDecimal: BigDecimal? = null
+    private var lonDecimal: BigDecimal? = null
+    private var address: String? = null
+    private lateinit var sharedPref: SharedPreferencesProvider
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -56,6 +50,7 @@ class FavoriteFragment : Fragment() {
             showAutoCompleteBar()
             binding.EmptylisttxtFav.visibility = View.GONE
         }
+
 
         //update RecyclerView
         favoriteViewModel.fetchFavorite().observe(viewLifecycleOwner) {
@@ -80,16 +75,14 @@ class FavoriteFragment : Fragment() {
         favoriteViewModel.getNavigation().observe(viewLifecycleOwner) {
             //it = placesList item clicked data --> [lat,lng] in favoriteAdapter
             if (it != null) {
-                latit = it[0]
-                longit = it[1]
-                sharedPref.setLatLongFav(latit, longit)
+
+                sharedPref.setLatLongFav(it[0], it[1])
                 intent.putExtra("lat", it[0])
                 intent.putExtra("lng", it[1])
                 activity?.startActivity(intent)
             }
         }
     }
-
 
     private fun showAutoCompleteBar() {
 

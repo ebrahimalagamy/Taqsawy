@@ -54,10 +54,6 @@ dependencies {
     //lottie
     implementation 'com.airbnb.android:lottie:4.2.0'
 
-    //bottom nav
-    implementation 'com.etebarian:meow-bottom-navigation:1.2.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0"
-
     // Room
     def room_version = "2.4.1"
     implementation "androidx.room:room-runtime:$room_version"
@@ -71,8 +67,6 @@ dependencies {
     // Kotlin Android Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
-
-    // Coroutine Lifecycle Scopes
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
 
@@ -90,11 +84,6 @@ dependencies {
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
-    // Kodein
-    def kodein_version = "5.2.0"
-    implementation "org.kodein.di:kodein-di-generic-jvm:$kodein_version"
-    implementation "org.kodein.di:kodein-di-framework-android-x:$kodein_version"
-
     // Better dateTime-time support even on older Android versions
     implementation "com.jakewharton.threetenabp:threetenabp:1.2.2"
 
@@ -104,9 +93,6 @@ dependencies {
     // WeatherLocation
     implementation "com.google.android.gms:play-services-location:19.0.1"
 
-    // New Material Design
-    implementation "com.google.android.material:material:1.5.0"
-
     //gif
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
@@ -115,9 +101,6 @@ dependencies {
 
     //map_box autocomplete
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0'
-
-    //expandable FAB
-    implementation 'com.github.imtuann:FloatingActionButtonExpandable:1.1.2'
 
     //workManager
     def work_version = "2.7.1"
@@ -135,7 +118,5 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.2.0'
     implementation 'com.scwang.wave:MultiWaveHeader:1.0.0-alpha-1'
 
-    //Star Animation in Android
-    //implementation 'com.sofakingforever.libraries:animated-stars-android:1.1.4@aar'
 
 }

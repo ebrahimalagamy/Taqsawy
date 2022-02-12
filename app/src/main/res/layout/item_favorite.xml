@@ -46,18 +46,6 @@
                     android:orientation="horizontal"
                     tools:ignore="NestedWeights">
 
-
-                    <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/place"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="10dp"
-                        app:lottie_autoPlay="true"
-                        app:lottie_loop="true"
-                        app:lottie_rawRes="@raw/snowlocation" />
-
-
                 <TextView
                     android:id="@+id/placeText"
                     android:layout_width="match_parent"
