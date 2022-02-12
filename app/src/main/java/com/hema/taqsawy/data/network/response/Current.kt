@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName
 import com.hema.taqsawy.data.db.converter.WeatherItemTypeConverter
 
 @TypeConverters(WeatherItemTypeConverter::class)
-
 data class Current(
 
     @field:SerializedName("sunrise")

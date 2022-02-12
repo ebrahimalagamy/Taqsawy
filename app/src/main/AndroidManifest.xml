@@ -28,7 +28,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.favoriteDetails.FavoriteDetailsActivity" />
+        <activity android:name="com.hema.taqsawy.ui.favorite.favoriteDetails.FavoriteDetailsActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

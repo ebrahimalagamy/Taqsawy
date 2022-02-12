@@ -14,7 +14,7 @@
     <string name="pressure">pressure</string>
     <string name="Clouds">Clouds</string>
     <string name="feels_like">"feels like:  "</string>
-    <string name="windspeed">"wind speed : "</string>
+    <string name="windspeed">"Wind speed : "</string>
     <string name="Humidity">"Humidity : "</string>
     <string name="Pressure">"pressure : "</string>
     <string name="clouds">"Clouds : "</string>
@@ -105,7 +105,7 @@
     <string name="enablelocation_">Enable Location</string>
     <string name="refresh">refresh</string>
     <string name="location_">Location</string>
-    <string name="emptyList">Empty List !! Please Add Some</string>
+    <string name="emptyList">Add Some Locations</string>
     <string name="welcome1">"Welcom "</string>
     <string name="addalarmperm">to add another alert, please un check the alarm switch first</string>
     <string name="settings">Settings</string>

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.hema.taqsawy.R
-import com.hema.taqsawy.data.db.pojo.favoritePlacesModel.FavoriteModel
+import com.hema.taqsawy.data.db.favoritePlacesModel.FavoriteModel
 import com.hema.taqsawy.ui.favorite.FavoriteViewModel
 import kotlinx.android.synthetic.main.list_item_favorite.view.*
 

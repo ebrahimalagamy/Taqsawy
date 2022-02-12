@@ -1,37 +1,34 @@
 package com.hema.taqsawy.data.repository
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.hema.taqsawy.R
-import com.hema.taqsawy.data.db.LocalSourceDB
-import com.hema.taqsawy.data.db.pojo.alarmModel.AlarmModel
-import com.hema.taqsawy.data.db.pojo.favoritePlacesModel.FavoriteModel
-import com.hema.taqsawy.data.db.pojo.weatherModel.CurrentWeatherModel
-import com.hema.taqsawy.data.network.WeatherClient
+import com.hema.taqsawy.data.db.ForecastDatabase
+import com.hema.taqsawy.data.db.alarmModel.AlarmModel
+import com.hema.taqsawy.data.db.favoritePlacesModel.FavoriteModel
+import com.hema.taqsawy.data.db.weatherModel.CurrentWeatherModel
+import com.hema.taqsawy.data.network.RetrofitInstance
+import com.hema.taqsawy.internal.Constants.Companion.API_KEY
 import com.hema.taqsawy.internal.UnitSystem
 import com.hema.taqsawy.providers.SharedPreferencesProvider
 import kotlinx.coroutines.*
 
+
 class Repository(private val application: Application) {
-    private val API_KEY = "d777ae60141a13cd6e1dd200ac6c5fdb"
-    private val localWeatherDB = LocalSourceDB.getInstance(application).weatherDao()
-    private val localFavoriteDB = LocalSourceDB.getInstance(application).favoriteDao()
-    private val localAlarmDB = LocalSourceDB.getInstance(application).alarmDao()
+
+    private val localWeatherDB = ForecastDatabase.getInstance(application).weatherDao()
+    private val localFavoriteDB = ForecastDatabase.getInstance(application).favoriteDao()
+    private val localAlarmDB = ForecastDatabase.getInstance(application).alarmDao()
 
     private var sharedPref: SharedPreferencesProvider = SharedPreferencesProvider(application)
     private val latLong = sharedPref.latLong
-
     private val latPref = latLong[0].toString()
     private val lngPref = latLong[1].toString()
     private val language = sharedPref.getLanguage.toString()
     private val unit = sharedPref.getUnit.toString()
 
-
-    // weather ----------------------------------------------------------------------------------------------------------------
-
     fun fetchData(): LiveData<CurrentWeatherModel> {
-        val exceptionHandlerException = CoroutineExceptionHandler { _, t: Throwable ->
+        val exceptionHandlerException = CoroutineExceptionHandler { _, _: Throwable ->
 
         }
         CoroutineScope(Dispatchers.IO + exceptionHandlerException).launch {
@@ -43,27 +40,18 @@ class Repository(private val application: Application) {
                     UnitSystem.tempUnit = application.getString(R.string.celicious)
                     UnitSystem.WindSpeedUnit = application.getString(R.string.mpers)
                 }
-                val response = WeatherClient.getWeatherService().getCurrentWeather(
+                val response = RetrofitInstance.getWeatherService().getCurrentWeather(
                     latPref, lngPref, "minutely", unit, language, API_KEY
                 )
-                Log.d("responseeeeeeee", latPref + unit + "--------" + lngPref)
 
                 if (response.isSuccessful) {
-                    // localWeatherDB.deleteAll()
                     localWeatherDB.insert(response.body())
-                    Log.d("responseeeeeeee", response.body().toString())
                 } else {
-                    Log.d("responseeeeeeee", response.message())
                 }
             }
         }
-
-        Log.d("responseeeeeeee", "ffffffffffffffffffffff")
         return localWeatherDB.getAll(latPref, lngPref)
     }
-
-
-    // favorite --------------------------------------------------------------------------------------------------------------
 
     fun fetchDataForFavorite(favLat: String?, favLng: String?): LiveData<CurrentWeatherModel> {
 
@@ -71,31 +59,22 @@ class Repository(private val application: Application) {
         }
 
         CoroutineScope(Dispatchers.IO + exceptionHandlerException).launch {
-            val response = WeatherClient.getWeatherService()
+            val response = RetrofitInstance.getWeatherService()
                 .getCurrentWeather(favLat, favLng, "minutely", unit, language, API_KEY)
-            Log.d("responseeeeeeee", favLat + "--------" + favLng)
             if (response.isSuccessful) {
                 localWeatherDB.insert(response.body())
-                Log.d("responseeeeeeee", response.body().toString())
-            } else {
-                Log.d("responseeeeeeee", response.message())
             }
         }
-
-        Log.d("responseeeeeeee", "ffffffffffffffffffffff")
         return localWeatherDB.getAll(favLat, favLng)
     }
-
 
     fun insertFavoritePlaces(favoriteModel: FavoriteModel) {
         localFavoriteDB.insertFavoritePlaces(favoriteModel)
     }
 
-
     fun retriveFavoritePlaces(): LiveData<List<FavoriteModel>> {
         return localFavoriteDB.getFavoritePlaces()
     }
-
 
     fun deleteFromDb(lat: String, lng: String) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -105,8 +84,6 @@ class Repository(private val application: Application) {
 
     }
 
-
-    /// alarm --------------------------------------------------------------------------------------------------
     fun insertAlarm(alarmModel: AlarmModel) {
         localAlarmDB.insertAlarmData(alarmModel)
     }
@@ -122,8 +99,6 @@ class Repository(private val application: Application) {
 
     }
 
-    /// BCR----------------------------------------------------------------------------------------------
-
     fun fetchDataForBCR() {
         runBlocking(Dispatchers.IO) {
             launch {
@@ -136,7 +111,7 @@ class Repository(private val application: Application) {
                             UnitSystem.tempUnit = application.getString(R.string.celicious)
                             UnitSystem.WindSpeedUnit = application.getString(R.string.mpers)
                         }
-                        val response = WeatherClient.getWeatherService()
+                        val response = RetrofitInstance.getWeatherService()
                             .getCurrentWeather(
                                 latPref,
                                 lngPref,
@@ -150,13 +125,11 @@ class Repository(private val application: Application) {
                         }
                     }
                 } catch (e: Exception) {
-                    Log.i("error", e.message.toString())
                 }
             }
         }
 
     }
-
 
 }
 

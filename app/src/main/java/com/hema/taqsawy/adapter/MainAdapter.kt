@@ -1,20 +1,17 @@
 package com.hema.taqsawy.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.hema.taqsawy.R
 import com.hema.taqsawy.data.network.response.HourlyItem
 import com.hema.taqsawy.internal.UnitSystem
 import com.hema.taqsawy.providers.SharedPreferencesProvider
-import kotlinx.android.synthetic.main.list_item_main.view.*
+import kotlinx.android.synthetic.main.item_hourly.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,7 +23,7 @@ class MainAdapter(private val mContext: Context, private val items: List<HourlyI
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.list_item_main, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_hourly, parent, false)
         return ViewHolder(view)
     }
 

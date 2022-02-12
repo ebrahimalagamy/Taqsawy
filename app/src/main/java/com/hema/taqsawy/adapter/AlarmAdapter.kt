@@ -19,10 +19,10 @@ import androidx.transition.TransitionManager
 import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.airbnb.lottie.LottieAnimationView
 import com.hema.taqsawy.R
-import com.hema.taqsawy.data.db.pojo.alarmModel.AlarmModel
+import com.hema.taqsawy.data.db.alarmModel.AlarmModel
 import com.hema.taqsawy.ui.alarm.AlarmBCR
 import com.hema.taqsawy.ui.alarm.AlarmViewModel
-import kotlinx.android.synthetic.main.list_item_alarm.view.*
+import kotlinx.android.synthetic.main.item_alarm.view.*
 
 
 class AlarmAdapter(
@@ -35,7 +35,7 @@ class AlarmAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.list_item_alarm, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_alarm, parent, false)
         return ViewHolder(view)
     }
 

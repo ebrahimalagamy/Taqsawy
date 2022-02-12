@@ -3,7 +3,7 @@ package com.hema.taqsawy.ui.weather
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.hema.taqsawy.data.db.pojo.weatherModel.CurrentWeatherModel
+import com.hema.taqsawy.data.db.weatherModel.CurrentWeatherModel
 import com.hema.taqsawy.data.repository.Repository
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
@@ -15,5 +15,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         currentWeatherLiveData = repository.fetchData()
         return currentWeatherLiveData
     }
+
 
 }

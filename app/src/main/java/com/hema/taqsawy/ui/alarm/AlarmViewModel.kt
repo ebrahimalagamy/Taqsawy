@@ -3,7 +3,7 @@ package com.hema.taqsawy.ui.alarm
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.hema.taqsawy.data.db.pojo.alarmModel.AlarmModel
+import com.hema.taqsawy.data.db.alarmModel.AlarmModel
 import com.hema.taqsawy.data.repository.Repository
 
 class AlarmViewModel(application: Application) : AndroidViewModel(application) {

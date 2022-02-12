@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.hema.taqsawy.data.db.pojo.favoritePlacesModel.FavoriteModel
-import com.hema.taqsawy.data.db.pojo.weatherModel.CurrentWeatherModel
+import com.hema.taqsawy.data.db.favoritePlacesModel.FavoriteModel
+import com.hema.taqsawy.data.db.weatherModel.CurrentWeatherModel
 import com.hema.taqsawy.data.repository.Repository
 
 class FavoriteViewModel(application: Application) : AndroidViewModel(application) {
@@ -24,7 +24,6 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
     }
 
 
-    //recyclerView Data handling
     fun insertFavorite(favoriteModel: FavoriteModel) {
         repository.insertFavoritePlaces(favoriteModel)
     }
@@ -37,7 +36,6 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
         repository.deleteFromDb(lat, lng)
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
 
 
     fun getNavigation(): MutableLiveData<List<String>> {

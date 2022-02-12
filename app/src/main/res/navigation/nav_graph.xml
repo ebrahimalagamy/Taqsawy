@@ -6,7 +6,7 @@
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.hema.taqsawy.ui.settings.SettingFragment"
+        android:name="com.hema.taqsawy.ui.setting.SettingFragment"
         android:label="SettingFragment"
         tools:layout="@layout/fragment_setting"/>
     <fragment

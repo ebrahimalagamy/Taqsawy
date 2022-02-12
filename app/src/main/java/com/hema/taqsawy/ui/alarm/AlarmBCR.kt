@@ -12,9 +12,9 @@ import android.os.Build
 import android.util.Log
 import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.hema.taqsawy.R
-import com.hema.taqsawy.data.db.LocalSourceDB
-import com.hema.taqsawy.data.db.pojo.alarmModel.AlarmModel
-import com.hema.taqsawy.data.db.pojo.weatherModel.CurrentWeatherModel
+import com.hema.taqsawy.data.db.ForecastDatabase
+import com.hema.taqsawy.data.db.alarmModel.AlarmModel
+import com.hema.taqsawy.data.db.weatherModel.CurrentWeatherModel
 import com.hema.taqsawy.data.network.response.DailyItem
 import com.hema.taqsawy.data.repository.Repository
 import com.hema.taqsawy.providers.SharedPreferencesProvider
@@ -49,10 +49,10 @@ class AlarmBCR : BroadcastReceiver() {
         val lng = latLong[1]
         runBlocking(Dispatchers.IO) {
             weatherResponse =
-                LocalSourceDB.getInstance(context.applicationContext as Application).weatherDao()
+                ForecastDatabase.getInstance(context.applicationContext as Application).weatherDao()
                     .getAllForBroadCast(lat, lng)
             alarmResponse =
-                LocalSourceDB.getInstance(context.applicationContext as Application).alarmDao()
+                ForecastDatabase.getInstance(context.applicationContext as Application).alarmDao()
                     .getAlarmById(alarmId)
         }
 

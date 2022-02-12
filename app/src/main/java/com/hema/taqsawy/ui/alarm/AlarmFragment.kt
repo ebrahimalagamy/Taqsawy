@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hema.taqsawy.R
 import com.hema.taqsawy.adapter.AlarmAdapter
 import com.hema.taqsawy.databinding.FragmentAlarmBinding
-import com.hema.taqsawy.data.db.pojo.alarmModel.AlarmModel
+import com.hema.taqsawy.data.db.alarmModel.AlarmModel
 import com.hema.taqsawy.providers.SharedPreferencesProvider
 import java.text.SimpleDateFormat
 import java.util.*
