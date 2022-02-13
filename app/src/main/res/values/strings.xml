@@ -77,7 +77,6 @@
     <string name="mileshr">miles/hr</string>
     <string name="celicious">C</string>
     <string name="mpers">m/s</string>
-    <string name="msfakes">" m/s"</string>
     <string name="hpa">\" hpa\"</string>
     <string name="alarm_Dialo_Rain">Rain</string>
     <string name="Alarm_dialo_temp">Temperature</string>
@@ -90,7 +89,6 @@
     <string name="number0"><![CDATA[number<= 0.0]]></string>
     <string name="numberempty">number text is empty</string>
     <string name="enterdesc">please enter your description</string>
-    <string name="jdhkrfghjdgjdj">Rain</string>
     <string name="becareful">BE CAREFUL</string>
     <string name="enterTime">\"please enter time to check and activate The Alarm \"</string>
     <string name="addAlertFirst">\"please add alert first \"</string>

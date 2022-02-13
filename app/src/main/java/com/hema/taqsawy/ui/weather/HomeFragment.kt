@@ -24,8 +24,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
 import com.hema.taqsawy.R
-import com.hema.taqsawy.adapter.HourlyAdapter
 import com.hema.taqsawy.adapter.DailyAdapter
+import com.hema.taqsawy.adapter.HourlyAdapter
 import com.hema.taqsawy.data.network.response.DailyItem
 import com.hema.taqsawy.data.network.response.HourlyItem
 import com.hema.taqsawy.databinding.FragmentHomeBinding
@@ -47,17 +47,16 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private var address: String = ""
 
-
     override fun onStart() {
         super.onStart()
         // Checking for first time launch - before calling setContentView()
         sharedPref = SharedPreferencesProvider(requireContext())
         if (sharedPref.isFirstTimeLaunch) { // if not the first time
-            CheckStatus()
+            checkInternet()
         }
     }
 
-    fun CheckStatus() {
+    private fun checkInternet() {
         if (!isConnected()) {
             showDialog()
             Toast.makeText(
@@ -76,7 +75,7 @@ class HomeFragment : Fragment() {
 
     }
 
-    fun isConnected(): Boolean {
+    private fun isConnected(): Boolean {
         val connectivityManager =
             requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities =
@@ -86,12 +85,16 @@ class HomeFragment : Fragment() {
                 TODO("VERSION.SDK_INT < M")
             }
         if (capabilities != null) {
-            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                return true
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                return true
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                return true
+            when {
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                    return true
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                    return true
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
+                    return true
+                }
             }
         }
         return false
@@ -99,14 +102,14 @@ class HomeFragment : Fragment() {
 
     private fun showDialog() {
         val builder = AlertDialog.Builder(requireActivity())
-        builder.setMessage(getString(com.hema.taqsawy.R.string.checkInterNet))
+        builder.setMessage(getString(R.string.checkInterNet))
             .setCancelable(false)
-            .setPositiveButton(getString(R.string.connect)) { dialog, which ->
+            .setPositiveButton(getString(R.string.connect)) { dialog, _ ->
                 startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
 
                 dialog.dismiss()
             }
-            .setNegativeButton(getString(R.string.exit)) { dialog, which ->
+            .setNegativeButton(getString(R.string.exit)) { dialog, _ ->
                 requireActivity().finish()
                 dialog.dismiss()
             }
@@ -134,9 +137,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sharedPref = SharedPreferencesProvider(requireActivity())
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         getLatestLocation()
-
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         bindUi()
 
@@ -222,9 +223,10 @@ class HomeFragment : Fragment() {
                     interval = 1000
                     numUpdates = 10
                 }
-                val fusedLocationProviderClient =
+
+                mFusedLocationClient =
                     LocationServices.getFusedLocationProviderClient(requireActivity().application)
-                fusedLocationProviderClient.requestLocationUpdates(
+                mFusedLocationClient.requestLocationUpdates(
                     locationRequest,
                     locationCallback,
                     Looper.getMainLooper()
@@ -242,30 +244,25 @@ class HomeFragment : Fragment() {
 
     private fun isPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(
-            requireActivity().application,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED &&
+            requireActivity().application, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(
-                    requireActivity().application,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
+                    requireActivity().application,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun checkLocation(): Boolean {
         val locationManager =
             requireActivity().application.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        return if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             sharedPref.setFirstTimeLocationenabled(true)
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             val location = locationResult.lastLocation
-            // TODO use current location long and lat
             val lonDecimal = BigDecimal(location.longitude).setScale(4, RoundingMode.HALF_DOWN)
             val latDecimal = BigDecimal(location.latitude).setScale(4, RoundingMode.HALF_DOWN)
             sharedPref.setLatLong("$latDecimal", "$lonDecimal")
@@ -274,8 +271,7 @@ class HomeFragment : Fragment() {
 
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(
+            requireActivity(), arrayOf(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ),
@@ -287,10 +283,10 @@ class HomeFragment : Fragment() {
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
         if (requestCode == PERMISSION_ID) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 getLatestLocation()
         }
     }
-    //400
 }

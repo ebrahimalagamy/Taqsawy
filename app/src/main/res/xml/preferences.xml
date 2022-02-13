@@ -8,7 +8,6 @@
             android:entries="@array/unitSystemEntries"
             android:entryValues="@array/unitSystemValues"
             android:key="UNIT_SYSTEM"
-            android:summary="%s"
             android:title="Unit system"
             app:useSimpleSummaryProvider="true" />
 
@@ -17,7 +16,6 @@
             android:entries="@array/languageEntries"
             android:entryValues="@array/languageValues"
             android:key="LANGUAGE"
-            android:summary="%s"
             android:title="Language"
             app:useSimpleSummaryProvider="true" />
 

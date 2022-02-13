@@ -226,7 +226,7 @@ class AlarmBCR : BroadcastReceiver() {
     }
 
     private fun showNotification() {
-        var builder = Notification.Builder(con)
+        var builder: Notification.Builder
         val manager = con.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -238,7 +238,6 @@ class AlarmBCR : BroadcastReceiver() {
         } else {
             builder = Notification.Builder(con)
         }
-        builder.setSmallIcon(R.mipmap.ic_launcher_round)
         builder.setTicker(con.getString(R.string.alert))
         builder.setContentTitle("Weather Alert")
         builder.setContentText(con.getString(R.string.becareful))

@@ -7,8 +7,7 @@
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.hema.taqsawy.ui.setting.SettingFragment"
-        android:label="SettingFragment"
-        tools:layout="@layout/fragment_setting" />
+        android:label="SettingFragment" />
     <fragment
         android:id="@+id/favouriteFragment"
         android:name="com.hema.taqsawy.ui.favorite.FavoriteFragment"

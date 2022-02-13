@@ -52,7 +52,6 @@ class FavoriteFragment : Fragment() {
             binding.EmptylisttxtFav.visibility = View.GONE
         }
 
-
         //update RecyclerView
         favoriteViewModel.fetchFavorite().observe(viewLifecycleOwner) {
             placesList = it as MutableList<FavoriteModel>
@@ -66,7 +65,6 @@ class FavoriteFragment : Fragment() {
                 binding.EmptylisttxtFav.visibility = View.VISIBLE
             }
         }
-
 
         // fetch weather data when click to search item
         favoriteViewModel.getWeatherFromFavorite(latDecimal.toString(), lonDecimal.toString())

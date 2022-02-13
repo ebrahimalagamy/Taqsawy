@@ -1,24 +1,21 @@
 package com.hema.taqsawy.ui.favorite.favoriteDetails
 
-import android.content.Context
 import android.location.Geocoder
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hema.taqsawy.adapter.HourlyAdapter
 import com.hema.taqsawy.adapter.DailyAdapter
+import com.hema.taqsawy.adapter.HourlyAdapter
 import com.hema.taqsawy.data.network.response.DailyItem
 import com.hema.taqsawy.data.network.response.HourlyItem
 import com.hema.taqsawy.databinding.ActivityFavoriteDetailsBinding
 import com.hema.taqsawy.internal.UnitSystem
-import com.hema.taqsawy.providers.MyContextWrapper
 import com.hema.taqsawy.providers.SharedPreferencesProvider
 import java.io.IOException
 import java.util.*
 
 class FavoriteDetailsActivity : AppCompatActivity() {
-
     private lateinit var dailyAdapter: DailyAdapter
     private lateinit var hourlyAdapter: HourlyAdapter
     private lateinit var binding: ActivityFavoriteDetailsBinding
@@ -27,17 +24,12 @@ class FavoriteDetailsActivity : AppCompatActivity() {
     private lateinit var lang: String
     private var address: String = ""
 
-    override fun attachBaseContext(newBase: Context?) {
-        sharedPref = SharedPreferencesProvider(newBase!!)
-        lang = sharedPref.getLanguage!!
-        super.attachBaseContext(MyContextWrapper.wrap(newBase, lang))
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoriteDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        sharedPref = SharedPreferencesProvider(this)
         val lat = intent.getStringExtra("lat")
         val lng = intent.getStringExtra("lng")
 
@@ -105,6 +97,11 @@ class FavoriteDetailsActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 
 }
