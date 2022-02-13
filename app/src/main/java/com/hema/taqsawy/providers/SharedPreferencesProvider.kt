@@ -48,8 +48,6 @@ class SharedPreferencesProvider(context: Context) {
         editor = pref.edit()
     }
 
-    /***********************************************************************************************
-     */
     fun setFirstTimeLaunch(isFirstTime: Boolean) {
         editor.putBoolean(IS_FIRST_TIME_LAUNCH, isFirstTime)
         editor.commit()
@@ -58,8 +56,6 @@ class SharedPreferencesProvider(context: Context) {
     val isFirstTimeLaunch: Boolean
         get() = pref.getBoolean(IS_FIRST_TIME_LAUNCH, true)
 
-    /***********************************************************************************************
-     */
     fun setFirstTimeLaunch1(isFirstTime: Boolean) {
         editor.putBoolean(IS_FIRST_TIME_LAUNCH_ONE, isFirstTime)
         editor.commit()
@@ -67,9 +63,6 @@ class SharedPreferencesProvider(context: Context) {
 
     val isFirstTimeLaunch1: Boolean
         get() = pref.getBoolean(IS_FIRST_TIME_LAUNCH_ONE, true)
-
-    /***********************************************************************************************
-     */
 
     fun setUnit(unit: String) {
         editor.putString(UNITS_SHARED_PREF, unit)
@@ -79,8 +72,6 @@ class SharedPreferencesProvider(context: Context) {
     val getUnit: String?
         get() = pref.getString(UNITS_SHARED_PREF, "metric")
 
-    /***********************************************************************************************
-     */
     fun setLanguage(Language: String) {
         editor.putString(LANGUAGE_SHARED_PREF, Language)
         editor.apply()
@@ -89,9 +80,6 @@ class SharedPreferencesProvider(context: Context) {
     val getLanguage: String?
         get() = pref.getString(LANGUAGE_SHARED_PREF, "en")
 
-
-    /***********************************************************************************************
-     */
     fun alarmSwitchedOn(converted: Boolean) {
         editor.putBoolean(IS_AlARM_SWITCHED_ON, converted)
         editor.commit()
@@ -100,8 +88,6 @@ class SharedPreferencesProvider(context: Context) {
     val isAlarmSwitchedOn: Boolean
         get() = pref.getBoolean(IS_AlARM_SWITCHED_ON, false)
 
-    /***********************************************************************************************
-     */
     fun setFirstTimeLocationenabled(isFirstTime: Boolean) {
         editor.putBoolean(IS_LOCATION_ENABLED, isFirstTime)
         editor.commit()
@@ -110,8 +96,6 @@ class SharedPreferencesProvider(context: Context) {
     val isFirstTimeLocationEnabled: Boolean
         get() = pref.getBoolean(IS_LOCATION_ENABLED, false)
 
-    /***********************************************************************************************
-     */
     fun setLatLong(latitude: String?, longitude: String?) {
         editor.putString(LAT_SHARED_PREF, latitude)
         editor.putString(LONG_SHARED_PREF, longitude)
@@ -127,9 +111,6 @@ class SharedPreferencesProvider(context: Context) {
             location[1] = lng
             return location
         }
-
-    /***********************************************************************************************
-     */
     fun setLatLongFav(latitude: String?, longitude: String?) {
         editor.putString(LAT_SHARED_PREF_FAV, latitude)
         editor.putString(LONG_SHARED_PREF_FAV, longitude)
@@ -146,9 +127,6 @@ class SharedPreferencesProvider(context: Context) {
             return location
         }
 
-    /***********************************************************************************************
-     */
-
     fun setLanguageBtnId(id: Int) {
         editor.putInt(LANGUAGE_BTN_CHECKED_ID, id)
         editor.apply()
@@ -157,8 +135,7 @@ class SharedPreferencesProvider(context: Context) {
     val getLanguageBtnId: Int
         get() = pref.getInt(LANGUAGE_BTN_CHECKED_ID, 1)
 
-    /***********************************************************************************************
-     */
+
     fun setUnitsBtnId(id: Int) {
         editor.putInt(UNITS_BTN_CHECKED_ID, id)
         editor.apply()

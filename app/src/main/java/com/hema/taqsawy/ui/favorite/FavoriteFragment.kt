@@ -45,8 +45,9 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         sharedPref = SharedPreferencesProvider(requireContext())
         favoriteViewModel = ViewModelProvider(this)[FavoriteViewModel::class.java]
+        binding.fabAddPlaces.setImageResource(R.drawable.add_location)
 
-        binding.fab.setOnClickListener {
+        binding.fabAddPlaces.setOnClickListener {
             showAutoCompleteBar()
             binding.EmptylisttxtFav.visibility = View.GONE
         }

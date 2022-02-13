@@ -16,8 +16,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class MainAdapter(private val mContext: Context, private val items: List<HourlyItem?>?) :
-    RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+class HourlyAdapter(private val mContext: Context, private val items: List<HourlyItem?>?) :
+    RecyclerView.Adapter<HourlyAdapter.ViewHolder>() {
 
     private lateinit var sharedPref: SharedPreferencesProvider
 
@@ -115,4 +115,3 @@ class MainAdapter(private val mContext: Context, private val items: List<HourlyI
 
     }
 }
-//130

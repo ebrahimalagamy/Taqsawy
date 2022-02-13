@@ -37,7 +37,6 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
     }
 
 
-
     fun getNavigation(): MutableLiveData<List<String>> {
         return navigate
     }

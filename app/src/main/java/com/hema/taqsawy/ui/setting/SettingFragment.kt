@@ -1,70 +1,42 @@
 package com.hema.taqsawy.ui.setting
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.preference.ListPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import com.hema.taqsawy.R
-import com.hema.taqsawy.databinding.FragmentSettingBinding
 import com.hema.taqsawy.providers.SharedPreferencesProvider
 
-class SettingFragment : Fragment() {
+class SettingFragment : PreferenceFragmentCompat() {
 
-    private lateinit var binding: FragmentSettingBinding
-    private lateinit var sharedPref: SharedPreferencesProvider
-    private var language: String = "en"
-    private var units: String = "metric"
+    private lateinit var unitListPreference: ListPreference
+    private lateinit var languageListPreference: ListPreference
+    lateinit var sharedPref: SharedPreferencesProvider
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSettingBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    @SuppressLint("ResourceAsColor")
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        addPreferencesFromResource(R.xml.preferences)
         sharedPref = SharedPreferencesProvider(requireContext())
+        val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
-        binding.toggleButtonGroupUnits.addOnButtonCheckedListener { _, checkedId, isChecked ->
+        unitListPreference = findPreference("UNIT_SYSTEM")!!
+        languageListPreference = findPreference("LANGUAGE")!!
 
-            if (isChecked) {
-                when (checkedId) {
-                    R.id.btnMetric -> {
-                        units = "metric"
-                    }
-                    R.id.btnImperial -> {
-                        units = "imperial"
-                    }
-                }
-                sharedPref.setUnit(units)
+        unitListPreference.onPreferenceChangeListener = Preference
+            .OnPreferenceChangeListener { _, value ->
+                pref.edit().putString("UNIT_SYSTEM", value.toString()).apply()
+                sharedPref.setUnit(value.toString())
+                findNavController().navigate(R.id.homeFragment)
+                true
             }
-        }
-
-        binding.toggleButtonGroupLanguage.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            if (isChecked) {
-                when (checkedId) {
-                    R.id.arabicBtn -> {
-                        language = "ar"
-                    }
-                    R.id.englishBtn -> {
-                        language = "en"
-                    }
-                }
-                sharedPref.setLanguage(language)
+        languageListPreference.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, value ->
+                pref.edit().putString("LANGUAGE", value.toString()).apply()
+                sharedPref.setLanguage(value.toString())
+                findNavController().navigate(R.id.homeFragment)
+                true
             }
-        }
-        binding.addAlarmBtn.setOnClickListener {
-            requireActivity().recreate()
-        }
 
     }
-
 }

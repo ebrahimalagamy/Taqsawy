@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="Settings">
+
+        <ListPreference
+            android:defaultValue="Metric"
+            android:entries="@array/unitSystemEntries"
+            android:entryValues="@array/unitSystemValues"
+            android:key="UNIT_SYSTEM"
+            android:summary="%s"
+            android:title="Unit system"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            android:defaultValue="English"
+            android:entries="@array/languageEntries"
+            android:entryValues="@array/languageValues"
+            android:key="LANGUAGE"
+            android:summary="%s"
+            android:title="Language"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -25,12 +25,8 @@ class FavoriteAdapter(
             LayoutInflater.from(parent.context).inflate(R.layout.item_favorite, parent, false)
         return ViewHolder(view)
     }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         holder.placeText.text = items[position].place ?: "non"
-        holder.latText.text = items[position].lat
-        holder.lngText.text = items[position].lng
         holder.delete.setOnClickListener {
             favViewModel.deleteItem(items[position].lat, items[position].lng)
             notifyItemRemoved(position)
@@ -44,8 +40,6 @@ class FavoriteAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
         var placeText: TextView = itemView.placeText
-        var latText: TextView = itemView.latText
-        var lngText: TextView = itemView.lngText
         var delete: LottieAnimationView = itemView.delete
 
 

@@ -17,8 +17,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class NextDayAdapter(private val mContext: Context, private val items: List<DailyItem?>?) :
-    RecyclerView.Adapter<NextDayAdapter.ViewHolder>() {
+class DailyAdapter(private val mContext: Context, private val items: List<DailyItem?>?) :
+    RecyclerView.Adapter<DailyAdapter.ViewHolder>() {
 
     lateinit var sharedPref: SharedPreferencesProvider
 
@@ -26,6 +26,7 @@ class NextDayAdapter(private val mContext: Context, private val items: List<Dail
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_daily, parent, false)
         return ViewHolder(view)
     }
+
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = items?.get(position)

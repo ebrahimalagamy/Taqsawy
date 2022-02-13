@@ -18,15 +18,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
 import com.hema.taqsawy.R
-import com.hema.taqsawy.adapter.MainAdapter
-import com.hema.taqsawy.adapter.NextDayAdapter
+import com.hema.taqsawy.adapter.HourlyAdapter
+import com.hema.taqsawy.adapter.DailyAdapter
 import com.hema.taqsawy.data.network.response.DailyItem
 import com.hema.taqsawy.data.network.response.HourlyItem
 import com.hema.taqsawy.databinding.FragmentHomeBinding
@@ -40,10 +39,10 @@ import java.util.*
 const val PERMISSION_ID = 100
 
 class HomeFragment : Fragment() {
-    private lateinit var nextDayAdapter: NextDayAdapter
+    private lateinit var dailyAdapter: DailyAdapter
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var sharedPref: SharedPreferencesProvider
-    private lateinit var mainAdapter: MainAdapter
+    private lateinit var hourlyAdapter: HourlyAdapter
     private lateinit var viewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
     private var address: String = ""
@@ -130,6 +129,7 @@ class HomeFragment : Fragment() {
             .show()
 
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -141,25 +141,26 @@ class HomeFragment : Fragment() {
         bindUi()
 
     }
+
     private fun bindUi() {
         viewModel.getWeather().observe(viewLifecycleOwner) {
             if (it != null) {
                 val daily: List<DailyItem?>? = it.daily
-                nextDayAdapter = NextDayAdapter(requireActivity(), daily)
-                binding.rvDailyWeather.adapter = nextDayAdapter
+                dailyAdapter = DailyAdapter(requireActivity(), daily)
+                binding.rvDailyWeather.adapter = dailyAdapter
                 binding.rvDailyWeather.layoutManager =
                     LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                 binding.rvDailyWeather.setHasFixedSize(true)
-                nextDayAdapter?.notifyDataSetChanged()
+                dailyAdapter?.notifyDataSetChanged()
             }
             if (it != null) {
                 val hourly: List<HourlyItem?>? = it.hourly
-                mainAdapter = MainAdapter(requireContext(), hourly)
-                binding.rvListWeatherHome.adapter = mainAdapter
+                hourlyAdapter = HourlyAdapter(requireContext(), hourly)
+                binding.rvListWeatherHome.adapter = hourlyAdapter
                 binding.rvListWeatherHome.layoutManager =
                     LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
                 binding.rvListWeatherHome.setHasFixedSize(true)
-                mainAdapter?.notifyDataSetChanged()
+                hourlyAdapter?.notifyDataSetChanged()
                 val description = it.current?.weather?.get(0)?.description
 
                 binding.tvTempeatur.text =
@@ -193,7 +194,8 @@ class HomeFragment : Fragment() {
 
                 binding.location.text = address
                 binding.tvWeather.text = description.toString()
-                binding.windSpeedTxt.text = it.current?.windSpeed.toString() + " ${UnitSystem.WindSpeedUnit}"
+                binding.windSpeedTxt.text =
+                    it.current?.windSpeed.toString() + " ${UnitSystem.WindSpeedUnit}"
                 binding.humidityTxt.text = it.current?.humidity.toString() + " %"
                 binding.pressure.text = it.current?.pressure.toString() + " hpa"
                 binding.clouds.text = it.current?.clouds.toString() + " %"
@@ -201,6 +203,7 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -236,6 +239,7 @@ class HomeFragment : Fragment() {
             requestPermission()
         }
     }
+
     private fun isPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(
             requireActivity().application,
@@ -246,6 +250,7 @@ class HomeFragment : Fragment() {
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ) == PackageManager.PERMISSION_GRANTED
     }
+
     private fun checkLocation(): Boolean {
         val locationManager =
             requireActivity().application.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -256,6 +261,7 @@ class HomeFragment : Fragment() {
             return false
         }
     }
+
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             val location = locationResult.lastLocation
@@ -265,6 +271,7 @@ class HomeFragment : Fragment() {
             sharedPref.setLatLong("$latDecimal", "$lonDecimal")
         }
     }
+
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
             requireActivity(),
@@ -275,6 +282,7 @@ class HomeFragment : Fragment() {
             1
         )
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {

@@ -1,5 +1,6 @@
 package com.hema.taqsawy.ui.alarm
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.TimePickerDialog
@@ -12,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.TimePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -21,15 +21,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hema.taqsawy.R
 import com.hema.taqsawy.adapter.AlarmAdapter
-import com.hema.taqsawy.databinding.FragmentAlarmBinding
 import com.hema.taqsawy.data.db.alarmModel.AlarmModel
+import com.hema.taqsawy.databinding.FragmentAlarmBinding
 import com.hema.taqsawy.providers.SharedPreferencesProvider
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class AlarmFragment : Fragment() {
-
     private lateinit var binding: FragmentAlarmBinding
     lateinit var sharedPref: SharedPreferencesProvider
 
@@ -68,8 +67,6 @@ class AlarmFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.fabAlarm.setOnClickListener {
-            binding.emptyImage.visibility = View.GONE
-            binding.emptyListTxt.visibility = View.GONE
             val customDialog = CustomDialogChooseFragment(alarmViewModel)
             customDialog.show(parentFragmentManager, "m")
 
@@ -85,18 +82,14 @@ class AlarmFragment : Fragment() {
             alarmAdapter.setIncomingList(it)
             alarmList = it as MutableList<AlarmModel>
             if (it.isEmpty()) {
-                binding.emptyImage.visibility = View.VISIBLE
-                binding.emptyListTxt.visibility = View.VISIBLE
                 binding.fabAlarm.visibility = View.VISIBLE
                 binding.alarmCheck.isChecked = false
             }
         })
 
-
-
         alarmSwitchedOn = sharedPref.isAlarmSwitchedOn
 
-        if (alarmSwitchedOn == true) {
+        if (alarmSwitchedOn) {
             binding.imgAlarm.setBackgroundResource(R.drawable.alarm)
             binding.checkEventLayout.visibility = View.GONE
             binding.fornextradioGroup.visibility = View.GONE
@@ -113,81 +106,77 @@ class AlarmFragment : Fragment() {
 
         }
 
-        binding.alarmCheck.setOnClickListener(View.OnClickListener {
-            if (binding.checkEventTimeTextInput == null) {
-                binding.alarmCheck.isChecked = false
-                Toast.makeText(requireContext(), getString(R.string.enterTime), Toast.LENGTH_SHORT)
-                    .show()
-            } else if (alarmList == null || alarmList.isEmpty()) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.addAlertFirst),
-                    Toast.LENGTH_SHORT
-                ).show()
-                binding.alarmCheck.isChecked = false
-            } else if (binding.alarmCheck.isChecked) {
-                Toast.makeText(requireContext(), getString(R.string.alarmon), Toast.LENGTH_SHORT)
-                    .show()
-                binding.imgAlarm.setBackgroundResource(R.drawable.alarm)
-                binding.checkEventLayout.visibility = View.GONE
-                binding.fornextradioGroup.visibility = View.GONE
-                sharedPref.alarmSwitchedOn(true)
-                binding.fabAlarm.visibility = View.GONE
-                Toast.makeText(context, getString(R.string.addalarmperm), Toast.LENGTH_LONG).show()
-                registerAll()
-            } else {
-                Toast.makeText(requireContext(), getString(R.string.alarmoff), Toast.LENGTH_SHORT)
-                    .show()
-                binding.imgAlarm.setBackgroundResource(R.drawable.alarm_off)
-                binding.checkEventLayout.visibility = View.VISIBLE
-                binding.fornextradioGroup.visibility = View.VISIBLE
-                sharedPref.alarmSwitchedOn(false)
-                binding.fabAlarm.visibility = View.VISIBLE
-                unRegisterAll()
+        binding.alarmCheck.setOnClickListener {
+            when {
+                alarmList.isEmpty() -> {
+                    binding.alarmCheck.isChecked = false
+                }
+                binding.alarmCheck.isChecked -> {
+                    binding.imgAlarm.setBackgroundResource(R.drawable.alarm)
+                    binding.checkEventLayout.visibility = View.GONE
+                    binding.fornextradioGroup.visibility = View.GONE
+                    sharedPref.alarmSwitchedOn(true)
+                    binding.fabAlarm.visibility = View.GONE
+                    Toast.makeText(context, getString(R.string.addalarmperm), Toast.LENGTH_LONG)
+                        .show()
+                    registerAll()
+                }
+                else -> {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.alarmoff),
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    binding.imgAlarm.setBackgroundResource(R.drawable.alarm_off)
+                    binding.checkEventLayout.visibility = View.VISIBLE
+                    binding.fornextradioGroup.visibility = View.VISIBLE
+                    sharedPref.alarmSwitchedOn(false)
+                    binding.fabAlarm.visibility = View.VISIBLE
+                    unRegisterAll()
+                }
             }
-        })
+        }
 
-        binding.checkEventTimeTextInput.setOnClickListener(View.OnClickListener {
+        binding.checkEventTimeTextInput.setOnClickListener {
             calenderTime(
                 binding.checkEventTimeTextInput,
                 calenderEvent.time.hours,
                 calenderEvent.time.minutes
             )
 
-        })
+        }
 
-        binding.fornextradioGroup.setOnCheckedChangeListener { group, checkedId ->
-            if (checkedId == R.id.R24hr) {
-                repeating = 24
-
-            } else if (checkedId == R.id.R48hr) {
-                repeating = 48
-
-            } else {
-
-                repeating = 72
+        binding.fornextradioGroup.setOnCheckedChangeListener { _, checkedId ->
+            repeating = when (checkedId) {
+                R.id.R24hr -> {
+                    24
+                }
+                R.id.R48hr -> {
+                    48
+                }
+                else -> {
+                    72
+                }
             }
             Toast.makeText(requireContext(), "$repeating", Toast.LENGTH_SHORT).show()
 
-
         }
-
 
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun calenderTime(checkEventTimeTextInput: EditText, hour: Int, min: Int) {
 
-        TimePickerDialog(requireContext(), object : TimePickerDialog.OnTimeSetListener {
-            override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
+        TimePickerDialog(requireContext(),
+            { _, p1, p2 ->
                 calenderEvent = Calendar.getInstance()
                 calenderEvent.set(Calendar.HOUR_OF_DAY, p1)
                 calenderEvent.set(Calendar.MINUTE, p2)
                 calenderEvent.set(Calendar.SECOND, 0)
                 checkEventTimeTextInput.setText(SimpleDateFormat("HH:mm").format(calenderEvent.time))
-                Log.i("timeinMilli", "${calenderEvent.timeInMillis}")
-
-            }
-        }, hour, min, false).show()
+            }, hour, min, false
+        ).show()
     }
 
 
@@ -211,8 +200,6 @@ class AlarmFragment : Fragment() {
                     calenderEvent.timeInMillis,
                     pendingIntent
                 )
-                Log.d("taaaaaaaaaaaaaaageee24", "${calenderEvent.timeInMillis} llllllll")
-
                 if (repeating == 48) {
                     pendingIntent = PendingIntent.getBroadcast(
                         context,
@@ -362,3 +349,4 @@ class AlarmFragment : Fragment() {
         }
     }
 }
+//359

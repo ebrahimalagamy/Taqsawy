@@ -6,8 +6,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hema.taqsawy.adapter.MainAdapter
-import com.hema.taqsawy.adapter.NextDayAdapter
+import com.hema.taqsawy.adapter.HourlyAdapter
+import com.hema.taqsawy.adapter.DailyAdapter
 import com.hema.taqsawy.data.network.response.DailyItem
 import com.hema.taqsawy.data.network.response.HourlyItem
 import com.hema.taqsawy.databinding.ActivityFavoriteDetailsBinding
@@ -19,8 +19,8 @@ import java.util.*
 
 class FavoriteDetailsActivity : AppCompatActivity() {
 
-    private lateinit var nextDayAdapter: NextDayAdapter
-    private lateinit var mainAdapter: MainAdapter
+    private lateinit var dailyAdapter: DailyAdapter
+    private lateinit var hourlyAdapter: HourlyAdapter
     private lateinit var binding: ActivityFavoriteDetailsBinding
     private lateinit var favoriteDetailsViewModel: FavoriteDetailsViewModel
     private lateinit var sharedPref: SharedPreferencesProvider
@@ -47,22 +47,22 @@ class FavoriteDetailsActivity : AppCompatActivity() {
         favoriteDetailsViewModel.getFavoriteWeatherData(lat, lng).observe(this) {
             if (it != null) {
                 val daily: List<DailyItem?>? = it.daily
-                nextDayAdapter = NextDayAdapter(applicationContext, daily)
-                binding.rvDailyWeather.adapter = nextDayAdapter
+                dailyAdapter = DailyAdapter(applicationContext, daily)
+                binding.rvDailyWeather.adapter = dailyAdapter
                 binding.rvDailyWeather.layoutManager =
                     LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
                 binding.rvDailyWeather.setHasFixedSize(true)
-                nextDayAdapter?.notifyDataSetChanged()
+                dailyAdapter?.notifyDataSetChanged()
             }
             if (it != null) {
                 val hourly: List<HourlyItem?>? = it.hourly
-                mainAdapter = MainAdapter(this, hourly)
+                hourlyAdapter = HourlyAdapter(this, hourly)
 
-                binding.rvListWeatherHome.adapter = mainAdapter
+                binding.rvListWeatherHome.adapter = hourlyAdapter
                 binding.rvListWeatherHome.layoutManager =
                     LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 binding.rvListWeatherHome.setHasFixedSize(true)
-                mainAdapter?.notifyDataSetChanged()
+                hourlyAdapter?.notifyDataSetChanged()
 
                 val description = it.current?.weather?.get(0)?.description
 
