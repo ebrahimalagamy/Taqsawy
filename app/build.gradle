@@ -7,7 +7,6 @@ plugins {
 
 android {
     compileSdk 32
-
     defaultConfig {
         applicationId "com.hema.taqsawy"
         minSdk 21
@@ -97,4 +96,6 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:$work_version"
     //day Picker
     implementation 'ca.antonious:materialdaypicker:0.7.4'
+
+    implementation 'com.github.MatteoBattilana:WeatherView:3.0.0'
 }

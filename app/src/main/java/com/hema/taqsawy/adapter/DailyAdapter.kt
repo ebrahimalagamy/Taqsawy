@@ -1,6 +1,5 @@
 package com.hema.taqsawy.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +26,6 @@ class DailyAdapter(private val mContext: Context, private val items: List<DailyI
         return ViewHolder(view)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = items?.get(position)
 
@@ -100,7 +98,7 @@ class DailyAdapter(private val mContext: Context, private val items: List<DailyI
             }
 
             else -> {
-                holder.iconTemp.setAnimation(R.raw.unknown)
+                holder.iconTemp.setAnimation(R.raw.unknown_icon)
             }
         }
     }

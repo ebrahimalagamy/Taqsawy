@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Geocoder
 import android.location.LocationManager
 import android.net.ConnectivityManager
@@ -18,10 +19,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.matteobattilana.weather.PrecipType
 import com.google.android.gms.location.*
 import com.hema.taqsawy.R
 import com.hema.taqsawy.adapter.DailyAdapter
@@ -45,13 +48,14 @@ class HomeFragment : Fragment() {
     private lateinit var hourlyAdapter: HourlyAdapter
     private lateinit var viewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
-    private var address: String = ""
+    private lateinit var address: String
+    private lateinit var weather:PrecipType
 
     override fun onStart() {
         super.onStart()
-        // Checking for first time launch - before calling setContentView()
+        // Checking for first time
         sharedPref = SharedPreferencesProvider(requireContext())
-        if (sharedPref.isFirstTimeLaunch) { // if not the first time
+        if (sharedPref.isFirstTimeLaunch) {
             checkInternet()
         }
     }
@@ -135,6 +139,12 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        weather = PrecipType.SNOW
+        binding.wvWeatherView.apply {
+            setWeatherData(weather)
+        }
+       // activity?.window?.statusBarColor = Color.TRANSPARENT
 
         sharedPref = SharedPreferencesProvider(requireActivity())
         getLatestLocation()
@@ -142,7 +152,6 @@ class HomeFragment : Fragment() {
         bindUi()
 
     }
-
     private fun bindUi() {
         viewModel.getWeather().observe(viewLifecycleOwner) {
             if (it != null) {
@@ -164,12 +173,7 @@ class HomeFragment : Fragment() {
                 hourlyAdapter?.notifyDataSetChanged()
                 val description = it.current?.weather?.get(0)?.description
 
-                binding.tvTempeatur.text =
-                    String.format(
-                        Locale.getDefault(),
-                        "%.0f°${UnitSystem.tempUnit}",
-                        it.current?.temp
-                    )
+
 
                 val geocoderAddres =
                     Geocoder(requireContext(), Locale(sharedPref.getLanguage.toString()))
@@ -192,11 +196,16 @@ class HomeFragment : Fragment() {
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-
+                binding.tvTempeatur.text =
+                    String.format(
+                        Locale.getDefault(),
+                        "%.0f°${UnitSystem.tempUnit}",
+                        it.current?.temp
+                    )
                 binding.location.text = address
-                binding.tvWeather.text = description.toString()
-                binding.windSpeedTxt.text =
-                    it.current?.windSpeed.toString() + " ${UnitSystem.WindSpeedUnit}"
+                binding.tvWeatherDescription.text = description.toString()
+                binding.windSpeedTxt.text = it.current?.windSpeed.toString()
+                binding.windSpeedTxtUnit.text = UnitSystem.WindSpeedUnit
                 binding.humidityTxt.text = it.current?.humidity.toString() + " %"
                 binding.pressure.text = it.current?.pressure.toString() + " hpa"
                 binding.clouds.text = it.current?.clouds.toString() + " %"

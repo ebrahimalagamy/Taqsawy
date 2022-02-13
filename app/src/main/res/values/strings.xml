@@ -14,10 +14,10 @@
     <string name="pressure">pressure</string>
     <string name="Clouds">Clouds</string>
     <string name="feels_like">"feels like:  "</string>
-    <string name="windspeed">"Wind speed : "</string>
-    <string name="Humidity">"Humidity : "</string>
-    <string name="Pressure">"pressure : "</string>
-    <string name="clouds">"Clouds : "</string>
+    <string name="windspeed">"Wind Speed"</string>
+    <string name="Humidity">"Humidity"</string>
+    <string name="Pressure">"Pressure"</string>
+    <string name="clouds">"Clouds"</string>
     <string name="daily_date">Daily Date</string>
     <string name="temp">Temp.</string>
     <string name="Temp">"Temp. : "</string>

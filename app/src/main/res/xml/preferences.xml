@@ -4,7 +4,7 @@
     <PreferenceCategory android:title="Settings">
 
         <ListPreference
-            android:defaultValue="Metric"
+            android:defaultValue="metric"
             android:entries="@array/unitSystemEntries"
             android:entryValues="@array/unitSystemValues"
             android:key="UNIT_SYSTEM"
@@ -12,7 +12,8 @@
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
-            android:defaultValue="English"
+
+            android:defaultValue="en"
             android:entries="@array/languageEntries"
             android:entryValues="@array/languageValues"
             android:key="LANGUAGE"

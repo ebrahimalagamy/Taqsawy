@@ -30,8 +30,8 @@ class SettingFragment : PreferenceFragmentCompat() {
                 findNavController().navigate(R.id.homeFragment)
                 true
             }
-        languageListPreference.onPreferenceChangeListener =
-            Preference.OnPreferenceChangeListener { _, value ->
+        languageListPreference.onPreferenceChangeListener = Preference
+            .OnPreferenceChangeListener { _, value ->
                 pref.edit().putString("LANGUAGE", value.toString()).apply()
                 sharedPref.setLanguage(value.toString())
                 findNavController().navigate(R.id.homeFragment)

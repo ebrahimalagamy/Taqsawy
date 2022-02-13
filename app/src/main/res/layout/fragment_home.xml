@@ -9,7 +9,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#90caf9">
+        android:background="#323232">
+
+        <com.github.matteobattilana.weather.WeatherView
+            android:id="@+id/wv_weather_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/location"
@@ -38,7 +48,7 @@
             app:layout_constraintTop_toBottomOf="@+id/location" />
 
         <TextView
-            android:id="@+id/tvWeather"
+            android:id="@+id/tvWeatherDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -58,17 +68,18 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
+            android:alpha=".99"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvWeather">
+            app:layout_constraintTop_toBottomOf="@+id/tvWeatherDescription">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="15dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -102,6 +113,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            android:alpha="0.99"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -112,21 +124,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="15dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/weatherDaily"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    android:alpha=".5"/>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height=".25dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@color/colorWhite" />
+                    android:background="@color/colorWhite"
+                    />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvDailyWeather"
@@ -142,9 +156,9 @@
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="130dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal"
             android:weightSum="2"
@@ -157,6 +171,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:alpha="0.99"
                 app:cardBackgroundColor="#0000"
                 app:cardCornerRadius="15dp">
 
@@ -170,11 +185,10 @@
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginStart="8dp"
                         android:text="@string/windspeed"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorWhite"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -182,11 +196,20 @@
                         android:id="@+id/windSpeedTxt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="@+id/textView3"
+                        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+                    <TextView
+                        android:id="@+id/windSpeedTxtUnit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
                         android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView3"
-                        app:layout_constraintStart_toEndOf="@+id/textView3"
-                        app:layout_constraintTop_toTopOf="@+id/textView3" />
+                        app:layout_constraintBottom_toBottomOf="@+id/windSpeedTxt"
+                        app:layout_constraintStart_toEndOf="@+id/windSpeedTxt" />
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/wind_icon"
@@ -194,8 +217,7 @@
                         android:layout_height="70dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
                         app:lottie_rawRes="@raw/turbine" />
@@ -209,6 +231,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:alpha="0.99"
                 app:cardBackgroundColor="#0000"
                 app:cardCornerRadius="15dp">
 
@@ -224,6 +247,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/Humidity"
+                        android:textColor="@color/colorWhite"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -233,9 +257,9 @@
                         android:id="@+id/humidityTxt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:textColor="@android:color/white"
-                        android:textSize="30sp"
-                        app:layout_constraintEnd_toEndOf="@+id/textView4"
+                        android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="@+id/textView4"
                         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -247,9 +271,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="130dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal"
             android:weightSum="2"
@@ -262,6 +286,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:alpha="0.99"
                 android:padding="1dp"
                 app:cardBackgroundColor="#0000"
                 app:cardCornerRadius="15dp">
@@ -287,10 +312,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView6"
-                        app:layout_constraintStart_toEndOf="@+id/textView6"
-                        app:layout_constraintTop_toTopOf="@+id/textView6" />
+                        android:textSize="18sp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/iconpressure"
@@ -298,8 +323,8 @@
                         android:layout_height="70dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
 
+                        app:layout_constraintTop_toTopOf="parent"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
                         app:lottie_rawRes="@raw/gauge" />
@@ -312,6 +337,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:alpha="0.99"
                 app:cardBackgroundColor="#0000"
                 app:cardCornerRadius="15dp">
 
@@ -336,10 +362,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView8"
-                        app:layout_constraintStart_toEndOf="@+id/textView8"
-                        app:layout_constraintTop_toTopOf="@+id/textView8" />
+                        android:textSize="18sp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintStart_toStartOf="@+id/textView8"
+                        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/iconcloud"
@@ -347,7 +373,7 @@
                         android:layout_height="70dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
                         app:lottie_rawRes="@raw/cloud" />

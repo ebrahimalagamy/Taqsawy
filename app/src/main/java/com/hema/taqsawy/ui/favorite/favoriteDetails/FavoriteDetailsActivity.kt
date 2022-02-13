@@ -1,10 +1,13 @@
 package com.hema.taqsawy.ui.favorite.favoriteDetails
 
+import android.annotation.SuppressLint
 import android.location.Geocoder
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.matteobattilana.weather.PrecipType
 import com.hema.taqsawy.adapter.DailyAdapter
 import com.hema.taqsawy.adapter.HourlyAdapter
 import com.hema.taqsawy.data.network.response.DailyItem
@@ -21,13 +24,20 @@ class FavoriteDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavoriteDetailsBinding
     private lateinit var favoriteDetailsViewModel: FavoriteDetailsViewModel
     private lateinit var sharedPref: SharedPreferencesProvider
-    private lateinit var lang: String
-    private var address: String = ""
+    private lateinit var address:String
+    private lateinit var weather: PrecipType
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoriteDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        weather = PrecipType.RAIN
+        binding.wvWeatherView.apply {
+            setWeatherData(weather)
+        }
 
         sharedPref = SharedPreferencesProvider(this)
         val lat = intent.getStringExtra("lat")
@@ -65,17 +75,17 @@ class FavoriteDetailsActivity : AppCompatActivity() {
                         it.current?.temp
                     )
 
-                val geocoderAddres = Geocoder(this, Locale(sharedPref.getLanguage.toString()))
+                val geocoderAddress = Geocoder(this, Locale(sharedPref.getLanguage.toString()))
 
                 try {
                     if (sharedPref.getLanguage.toString() == "ar") {
-                        address = geocoderAddres.getFromLocation(it.lat, it.lon, 1)[0].countryName
+                       address = geocoderAddress.getFromLocation(it.lat, it.lon, 1)[0].countryName
                             ?: it.timezone.toString()
                     } else {
-                        address = geocoderAddres.getFromLocation(it.lat, it.lon, 1)[0].adminArea
+                        address = geocoderAddress.getFromLocation(it.lat, it.lon, 1)[0].adminArea
                             ?: it.timezone.toString()
                         address += ",${
-                            geocoderAddres.getFromLocation(
+                            geocoderAddress.getFromLocation(
                                 it.lat,
                                 it.lon,
                                 1
@@ -87,7 +97,7 @@ class FavoriteDetailsActivity : AppCompatActivity() {
                 }
 
                 binding.location.text = address
-                binding.tvWeather.text = description.toString()
+                binding.tvWeatherDescription.text = description.toString()
                 binding.windSpeedTxt.text =
                     it.current?.windSpeed.toString() + " ${UnitSystem.WindSpeedUnit}"
                 binding.humidityTxt.text = it.current?.humidity.toString() + " %"
@@ -98,10 +108,4 @@ class FavoriteDetailsActivity : AppCompatActivity() {
             }
         }
     }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
-    }
-
 }

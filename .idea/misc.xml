@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable-hdpi/ic_alarm.xml" value="0.128" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable-hdpi/ic_favorite.xml" value="0.194" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable-hdpi/ic_home.xml" value="0.1635" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable-hdpi/ic_settings.xml" value="0.194" />
@@ -19,6 +20,7 @@
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/add_location.xml" value="0.194" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/alarm.xml" value="0.194" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/alarm_add.xml" value="0.194" />
+        <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/alarm_off.xml" value="0.128" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/bottom_navigation_selector.xml" value="0.194" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/bottomsheet.xml" value="0.194" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/check_circle.xml" value="0.194" />
@@ -30,6 +32,7 @@
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_24.xml" value="0.194" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/ic_baseline_keyboard_arrow_up_24.xml" value="0.194" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/ic_baseline_phone_24.xml" value="0.194" />
+        <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/ic_launcher_background.xml" value="0.128" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/notifications.xml" value="0.194" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/notifications_off.xml" value="0.194" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/drawable/rounded_edittext.xml" value="0.194" />
@@ -51,7 +54,9 @@
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/layout/fragment_next_day_fav.xml" value="0.1265625" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/layout/fragment_setting.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/layout/item_alarm.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/layout/item_daily.xml" value="0.1265625" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/layout/item_favorite.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/layout/item_hourly.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/layout/list_item_alarm.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/layout/list_item_favorite.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Ebrah/AndroidStudioProjects/Taqsawy/app/src/main/res/layout/list_item_main.xml" value="0.72" />

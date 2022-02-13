@@ -98,7 +98,7 @@ class HourlyAdapter(private val mContext: Context, private val items: List<Hourl
             }
 
             else -> {
-                holder.iconTemp.setAnimation(R.raw.unknown)
+                holder.iconTemp.setAnimation(R.raw.unknown_icon)
             }
         }
     }

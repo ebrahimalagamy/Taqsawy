@@ -30,7 +30,7 @@ class FavoriteFragment : Fragment() {
     private lateinit var intent: Intent
     private var latDecimal: BigDecimal? = null
     private var lonDecimal: BigDecimal? = null
-    private var address: String? = null
+    private lateinit var address: String
     private lateinit var sharedPref: SharedPreferencesProvider
 
     override fun onCreateView(
@@ -45,11 +45,9 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         sharedPref = SharedPreferencesProvider(requireContext())
         favoriteViewModel = ViewModelProvider(this)[FavoriteViewModel::class.java]
-        binding.fabAddPlaces.setImageResource(R.drawable.add_location)
-
         binding.fabAddPlaces.setOnClickListener {
             showAutoCompleteBar()
-            binding.EmptylisttxtFav.visibility = View.GONE
+            binding.tvAddLocations.visibility = View.GONE
         }
 
         //update RecyclerView
@@ -62,7 +60,7 @@ class FavoriteFragment : Fragment() {
             binding.recyclerView.setHasFixedSize(true)
             favoriteAdapter?.notifyDataSetChanged()
             if (it.isEmpty()) {
-                binding.EmptylisttxtFav.visibility = View.VISIBLE
+                binding.tvAddLocations.visibility = View.VISIBLE
             }
         }
 
