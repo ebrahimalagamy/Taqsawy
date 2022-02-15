@@ -31,6 +31,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/delete" />
 
+
             <ImageView
                 android:id="@+id/delete"
                 android:layout_width="30dp"

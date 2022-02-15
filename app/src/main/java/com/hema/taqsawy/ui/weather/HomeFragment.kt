@@ -6,7 +6,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Geocoder
 import android.location.LocationManager
 import android.net.ConnectivityManager
@@ -15,6 +14,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +23,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.matteobattilana.weather.PrecipType
 import com.google.android.gms.location.*
@@ -40,7 +42,6 @@ import java.math.RoundingMode
 import java.util.*
 
 const val PERMISSION_ID = 100
-
 class HomeFragment : Fragment() {
     private lateinit var dailyAdapter: DailyAdapter
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
@@ -49,12 +50,13 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
     private lateinit var address: String
-    private lateinit var weather:PrecipType
+    private lateinit var weather: PrecipType
+//    private lateinit var lat:String
+//    private lateinit var log:String
 
     override fun onStart() {
         super.onStart()
-        // Checking for first time
-        sharedPref = SharedPreferencesProvider(requireContext())
+        sharedPref = SharedPreferencesProvider(requireActivity())
         if (sharedPref.isFirstTimeLaunch) {
             checkInternet()
         }
@@ -110,7 +112,6 @@ class HomeFragment : Fragment() {
             .setCancelable(false)
             .setPositiveButton(getString(R.string.connect)) { dialog, _ ->
                 startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
-
                 dialog.dismiss()
             }
             .setNegativeButton(getString(R.string.exit)) { dialog, _ ->
@@ -144,14 +145,14 @@ class HomeFragment : Fragment() {
         binding.wvWeatherView.apply {
             setWeatherData(weather)
         }
-       // activity?.window?.statusBarColor = Color.TRANSPARENT
-
+        // activity?.window?.statusBarColor = Color.TRANSPARENT
         sharedPref = SharedPreferencesProvider(requireActivity())
         getLatestLocation()
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         bindUi()
 
     }
+
     private fun bindUi() {
         viewModel.getWeather().observe(viewLifecycleOwner) {
             if (it != null) {
@@ -162,8 +163,9 @@ class HomeFragment : Fragment() {
                     LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                 binding.rvDailyWeather.setHasFixedSize(true)
                 dailyAdapter?.notifyDataSetChanged()
-            }
-            if (it != null) {
+
+                binding.progressbar.visibility = View.GONE
+//                binding.tvCheckInternet.visibility = View.GONE
                 val hourly: List<HourlyItem?>? = it.hourly
                 hourlyAdapter = HourlyAdapter(requireContext(), hourly)
                 binding.rvListWeatherHome.adapter = hourlyAdapter
@@ -171,44 +173,51 @@ class HomeFragment : Fragment() {
                     LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
                 binding.rvListWeatherHome.setHasFixedSize(true)
                 hourlyAdapter?.notifyDataSetChanged()
-                val description = it.current?.weather?.get(0)?.description
 
-
-
-                val geocoderAddres =
+                val geocoderAddress =
                     Geocoder(requireContext(), Locale(sharedPref.getLanguage.toString()))
 
                 try {
                     if (sharedPref.getLanguage.toString() == "ar") {
-                        address = geocoderAddres.getFromLocation(it.lat, it.lon, 1)[0].countryName
+                        address = geocoderAddress.getFromLocation(it.lat, it.lon, 1)[0].countryName
                             ?: it.timezone.toString()
                     } else {
-                        address = geocoderAddres.getFromLocation(it.lat, it.lon, 1)[0].adminArea
+                        address = geocoderAddress.getFromLocation(it.lat, it.lon, 1)[0].adminArea
                             ?: it.timezone.toString()
                         address += ",${
-                            geocoderAddres.getFromLocation(
+                            geocoderAddress.getFromLocation(
                                 it.lat,
                                 it.lon,
                                 1
                             )[0].countryName ?: it.timezone.toString()
                         }"
                     }
+
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-                binding.tvTempeatur.text =
+
+                binding.tvTemp.text =
                     String.format(
                         Locale.getDefault(),
                         "%.0f°${UnitSystem.tempUnit}",
                         it.current?.temp
                     )
                 binding.location.text = address
-                binding.tvWeatherDescription.text = description.toString()
+                binding.tvWeatherDescription.text =
+                    it.current?.weather?.get(0)?.description.toString()
                 binding.windSpeedTxt.text = it.current?.windSpeed.toString()
                 binding.windSpeedTxtUnit.text = UnitSystem.WindSpeedUnit
                 binding.humidityTxt.text = it.current?.humidity.toString() + " %"
-                binding.pressure.text = it.current?.pressure.toString() + " hpa"
+                binding.pressure.text = it.current?.pressure.toString()
                 binding.clouds.text = it.current?.clouds.toString() + " %"
+                binding.tempMax.text = daily?.get(0)?.temp?.max?.toInt().toString().plus("°")
+                binding.tempMin.text = daily?.get(0)?.temp?.min?.toInt().toString().plus("°")
+
+            } else {
+                binding.progressbar.visibility = View.VISIBLE
+                //  binding.tvCheckInternet.visibility = View.VISIBLE
+
 
             }
         }
@@ -240,6 +249,7 @@ class HomeFragment : Fragment() {
                     locationCallback,
                     Looper.getMainLooper()
                 )
+
             } else {
                 showLocationDialog(
                     getString(R.string.location_),
@@ -253,9 +263,11 @@ class HomeFragment : Fragment() {
 
     private fun isPermissionGranted(): Boolean {
         return ActivityCompat.checkSelfPermission(
-            requireActivity().application, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            requireActivity().application, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(
-                    requireActivity().application,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    requireActivity().application, Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun checkLocation(): Boolean {
@@ -275,6 +287,8 @@ class HomeFragment : Fragment() {
             val lonDecimal = BigDecimal(location.longitude).setScale(4, RoundingMode.HALF_DOWN)
             val latDecimal = BigDecimal(location.latitude).setScale(4, RoundingMode.HALF_DOWN)
             sharedPref.setLatLong("$latDecimal", "$lonDecimal")
+//            lat=latDecimal.toString()
+//            log=lonDecimal.toString()
         }
     }
 

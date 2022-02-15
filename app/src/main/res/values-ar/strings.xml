@@ -6,11 +6,9 @@
     <string name="Date">Monday, 5 May</string>
     <string name="humidity">"الرطوبة "</string>
     <string name="windSpeed">"سرعة الرياح "</string>
-    <string name="temperature">20</string>
-    <string name="weatherHourly">الساعات القادمة </string>
+    <string name="weatherHourly">"الساعات القادمة" </string>
     <string name="weatherDaily">السبع أيام القادمة </string>
     <string name="location">الموقع </string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pressure">الضغط </string>
     <string name="Clouds">الغيوم </string>
     <string name="feels_like">"تبدو مثل: "</string>
@@ -25,12 +23,12 @@
     <string name="AddFav">أضف مكانك المفضل</string>
     <string name="place">المكان</string>
     <string name="search">بحث</string>
-    <string name="change_language">تغيير اللغة</string>
+    <string name="language">اللغة</string>
     <string name="imperial_units">وحدات ملكية</string>
-    <string name="change_units">تغيير الوحدات</string>
+    <string name="units">الوحدات</string>
     <string name="metric_units">وحدات مترية</string>
     <string name="save">حفظ</string>
-    <string name="alarm">المنبه</string>
+
     <string name="check_events_at">ضبط المنبه الساعة: </string>
     <string name="time">الوقت</string>
     <string name="rain">أمطار</string>
@@ -63,6 +61,7 @@
     <string name="no">لا</string>
     <string name="snow">ُثلوج</string>
     <string name="arabic">العربية</string>
+    <string name="english">الانجليزية</string>
     <string name="metric_Choice">مترية</string>
     <string name="imperial_Choice">امبريال</string>
     <string name="skip">تخطي</string>
@@ -99,20 +98,24 @@
     <string name="enablelocation">Kindly enable Location to use Application properly</string>
     <string name="checkInterNet">Please check the Internet to proceed further</string>
     <string name="connect">Connect</string>
-    <string name="exit">Exit</string>
+    <string name="exit">خروج</string>
     <string name="enablelocation_">Enable Location</string>
     <string name="refresh">refresh</string>
     <string name="location_">Location</string>
-    <string name="emptyList">Empty List !! Please Add Some</string>
-    <string name="welcome1">"Welcom "</string>
+    <string name="emptyList">اضافة بعض المناطق</string>
     <string name="addalarmperm">to add another alert, please un check the alarm switch first</string>
-    <string name="settings">Settings</string>
-    <string name="temp_Settings">Temperature</string>
-    <string name="windSpeed_settings">Wind speed</string>
+    <string name="settings">الاعدادات</string>
+    <string name="temp_Settings">الحرارة</string>
+    <string name="windSpeed_settings">سرعة الرياح</string>
     <string name="C">C</string>
     <string name="F">F</string>
     <string name="mpersec">m/sec</string>
     <string name="mileperhr">mile/hr</string>
-    <string name="alert">Alert</string>
+    <string name="weather">الطقس</string>
+    <string name="favourite">المفضله</string>
+    <string name="setting">الاعدادات</string>
+    <string name="alarm">المنبة</string>
+    <string name="h">H:</string>
+
 
 </resources>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="unitSystemEntries">
-        <item>Metric</item>
-        <item>Imperial</item>
+        <item>@string/metric_Choice</item>
+        <item>@string/imperial_Choice</item>
     </string-array>
 
     <string-array name="unitSystemValues">
@@ -11,8 +11,8 @@
     </string-array>
 
     <string-array name="languageEntries">
-        <item>English</item>
-        <item>Arabic</item>
+        <item>@string/english</item>
+        <item>@string/arabic</item>
     </string-array>
 
     <string-array name="languageValues">

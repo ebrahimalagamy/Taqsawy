@@ -1,6 +1,7 @@
 package com.hema.taqsawy.ui.setting
 
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -17,6 +18,10 @@ class SettingFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
+
+        requireContext().setTheme(R.style.AppTheme);
+
+
         sharedPref = SharedPreferencesProvider(requireContext())
         val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
@@ -30,6 +35,7 @@ class SettingFragment : PreferenceFragmentCompat() {
                 findNavController().navigate(R.id.homeFragment)
                 true
             }
+
         languageListPreference.onPreferenceChangeListener = Preference
             .OnPreferenceChangeListener { _, value ->
                 pref.edit().putString("LANGUAGE", value.toString()).apply()
@@ -39,4 +45,13 @@ class SettingFragment : PreferenceFragmentCompat() {
             }
 
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        requireContext().setTheme(R.style.AppTheme)
+        view.setBackgroundColor(resources.getColor(R.color.colorWhite))
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+
 }
