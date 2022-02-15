@@ -1,34 +1,39 @@
 package com.hema.taqsawy.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieAnimationView
-import com.hema.taqsawy.R
 import com.hema.taqsawy.data.db.favoritePlacesModel.FavoriteModel
+import com.hema.taqsawy.databinding.ItemFavoriteBinding
 import com.hema.taqsawy.ui.favorite.FavoriteViewModel
-import kotlinx.android.synthetic.main.item_favorite.view.*
 
 
 class FavoriteAdapter(
-    private val items: List<FavoriteModel>,
-    favoriteViewModel: FavoriteViewModel
+    private val items: List<FavoriteModel>, favoriteViewModel: FavoriteViewModel
 
 ) : RecyclerView.Adapter<FavoriteAdapter.ViewHolder>() {
 
-    val favViewModel: FavoriteViewModel = favoriteViewModel
+    private val favViewModel: FavoriteViewModel = favoriteViewModel
+    private lateinit var mListener: OnItemClickListener
+    private lateinit var binding: ItemFavoriteBinding
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        mListener = listener
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_favorite, parent, false)
-        return ViewHolder(view)
+        binding = ItemFavoriteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding, mListener)
     }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.placeText.text = items[position].place ?: "non"
-        holder.delete.setOnClickListener {
+        holder.binding.placeText.text = items[position].place ?: "non"
+        holder.binding.delete.setOnClickListener {
             favViewModel.deleteItem(items[position].lat, items[position].lng)
             notifyItemRemoved(position)
         }
@@ -38,25 +43,15 @@ class FavoriteAdapter(
         return items.size
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
-        var placeText: TextView = itemView.placeText
-        var delete: ImageView = itemView.delete
-
-
+    inner class ViewHolder(val binding: ItemFavoriteBinding, listener: OnItemClickListener) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
-            itemView.setOnClickListener(this)
+            itemView.setOnClickListener {
+                listener.onItemClick(adapterPosition)
+                val latClick = items[adapterPosition].lat
+                val lngClick = items[adapterPosition].lng
+                favViewModel.onClick("$latClick", "$lngClick")
+            }
         }
-
-        override fun onClick(v: View?) {
-            val pos = adapterPosition
-            val latClick = items[pos].lat
-            val lngClick = items[pos].lng
-            favViewModel.onClick("$latClick", "$lngClick")
-        }
-
-
     }
-
-
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/BackGround"/>
+    <item android:drawable="@drawable/ic_cloudy_day_3" android:gravity="center"/>
+
+</layer-list>
