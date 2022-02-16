@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorWhite</item>
+        <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/colorWhite</item>
         <item name="colorAccent">#1E1E1E</item>
         <item name="android:statusBarColor">#323232</item>

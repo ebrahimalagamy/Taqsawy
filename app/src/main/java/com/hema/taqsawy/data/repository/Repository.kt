@@ -34,6 +34,7 @@ class Repository(private val application: Application) {
 
         }
         CoroutineScope(Dispatchers.IO + exceptionHandlerException).launch {
+
             if (unit == "imperial") {
                 UnitSystem.tempUnit = application.getString(R.string.Feherinhite)
                 UnitSystem.WindSpeedUnit = application.getString(R.string.mileshr)

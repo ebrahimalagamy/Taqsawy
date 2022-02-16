@@ -116,6 +116,16 @@
     <string name="setting">الاعدادات</string>
     <string name="alarm">المنبة</string>
     <string name="h">H:</string>
+    <string name="l">L:</string>
+    <string name="useDeviceLocation">استخدام موقع الجهاز</string>
+    <string name="allowWeatherToGetYourLocation">السماح للتطبيق بالحصول علي موقعك</string>
+    <string name="locationFromWhichWeatherIsDisplayed">اختار الموقع من علي الخريطه</string>
+    <string name="offline"> يرجى التحقق من اتصالك بالإنترنت لتتمكن من اختيار الموقع</string>
+
+
+
+
+
 
 
 </resources>
