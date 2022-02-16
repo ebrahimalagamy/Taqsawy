@@ -1,31 +1,34 @@
 package com.hema.taqsawy.data.repository
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.hema.taqsawy.R
 import com.hema.taqsawy.data.db.ForecastDatabase
-import com.hema.taqsawy.data.db.alarmModel.AlarmModel
 import com.hema.taqsawy.data.db.favoritePlacesModel.FavoriteModel
 import com.hema.taqsawy.data.db.weatherModel.CurrentWeatherModel
 import com.hema.taqsawy.data.network.RetrofitInstance
 import com.hema.taqsawy.internal.Constants.Companion.API_KEY
 import com.hema.taqsawy.internal.UnitSystem
 import com.hema.taqsawy.providers.SharedPreferencesProvider
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class Repository(private val application: Application) {
 
     private val localWeatherDB = ForecastDatabase.getInstance(application).weatherDao()
     private val localFavoriteDB = ForecastDatabase.getInstance(application).favoriteDao()
-    private val localAlarmDB = ForecastDatabase.getInstance(application).alarmDao()
 
     private var sharedPref: SharedPreferencesProvider = SharedPreferencesProvider(application)
+
     private val latLong = sharedPref.latLong
-    private val latPref = latLong[0].toString()
-    private val lngPref = latLong[1].toString()
-    private val language = sharedPref.getLanguage.toString()
-    private val unit = sharedPref.getUnit.toString()
+    private var latPref: String = latLong[0].toString()
+    private var lngPref: String = latLong[1].toString()
+    private var language: String = sharedPref.getLanguage.toString()
+    private var unit: String = sharedPref.getUnit.toString()
 
     fun fetchData(): LiveData<CurrentWeatherModel> {
         val exceptionHandlerException = CoroutineExceptionHandler { _, _: Throwable ->
@@ -44,8 +47,11 @@ class Repository(private val application: Application) {
             )
 
             if (response.isSuccessful) {
+                Log.e("Repository", "success")
                 localWeatherDB.insert(response.body())
             } else {
+                Log.e("Repository", "failure of api call " + response.message())
+
             }
         }
         return localWeatherDB.getAll(latPref, lngPref)
@@ -66,11 +72,19 @@ class Repository(private val application: Application) {
         return localWeatherDB.getAll(favLat, favLng)
     }
 
+    fun setinfo(lat: String, long: String, lang: String, unit_: String) {
+
+        latPref = lat
+        lngPref = long
+        language = lang
+        unit = unit_
+    }
+
     fun insertFavoritePlaces(favoriteModel: FavoriteModel) {
         localFavoriteDB.insertFavoritePlaces(favoriteModel)
     }
 
-    fun retriveFavoritePlaces(): LiveData<List<FavoriteModel>> {
+    fun fetchFavoritePlaces(): LiveData<List<FavoriteModel>> {
         return localFavoriteDB.getFavoritePlaces()
     }
 
@@ -78,51 +92,6 @@ class Repository(private val application: Application) {
         CoroutineScope(Dispatchers.IO).launch {
             localFavoriteDB.deleteAll(lat, lng)
             localWeatherDB.deleteAllWeather(lat, lng)
-        }
-
-    }
-
-    fun insertAlarm(alarmModel: AlarmModel) {
-        localAlarmDB.insertAlarmData(alarmModel)
-    }
-
-    fun retrieveAlarmData(): LiveData<List<AlarmModel>> {
-        return localAlarmDB.getAlarmData()
-    }
-
-    fun deleteAlarm(id: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            localAlarmDB.deleteAlarm(id)
-        }
-
-    }
-
-    fun fetchDataForBCR() {
-        runBlocking(Dispatchers.IO) {
-            launch {
-                try {
-                    if (unit == "imperial") {
-                        UnitSystem.tempUnit = application.getString(R.string.Feherinhite)
-                        UnitSystem.WindSpeedUnit = application.getString(R.string.mileshr)
-                    } else if (unit == "metric") {
-                        UnitSystem.tempUnit = application.getString(R.string.celicious)
-                        UnitSystem.WindSpeedUnit = application.getString(R.string.mpers)
-                    }
-                    val response = RetrofitInstance.getWeatherService()
-                        .getCurrentWeather(
-                            latPref,
-                            lngPref,
-                            "minutely",
-                            unit,
-                            language,
-                            API_KEY
-                        )
-                    if (response.isSuccessful) {
-                        localWeatherDB.insert(response.body())
-                    }
-                } catch (e: Exception) {
-                }
-            }
         }
 
     }

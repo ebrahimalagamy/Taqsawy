@@ -2,20 +2,15 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorWhite</item>
-        <item name="colorPrimaryDark">@color/colorWhite</item>
-        <item name="colorAccent">@color/colorWhite</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">#1E1E1E</item>
         <item name="android:statusBarColor">#323232</item>
-
-        <item name="alertDialogTheme">@style/DialogTheme</item>
-
     </style>
 
-    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:colorBackground">#1E1E1E</item>
-        <item name="android:textColorSecondary">#D8D8D8</item>
-        <item name="textColorAlertDialogListItem">#D8D8D8</item>
-        <item name="color">#D8D8D8</item>
+    <style name="splashScreenTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_image</item>
+        <item name="android:statusBarColor">@color/BackGround</item>
     </style>
 
 </resources>

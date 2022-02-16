@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
 }
 
 android {
@@ -37,6 +36,7 @@ android {
 
 dependencies {
 
+    implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
@@ -49,6 +49,7 @@ dependencies {
 
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+
     //lottie
     implementation 'com.airbnb.android:lottie:4.2.0'
 
@@ -85,9 +86,6 @@ dependencies {
     // WeatherLocation
     implementation "com.google.android.gms:play-services-location:19.0.1"
 
-    //gif
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
-
     //map_box autocomplete
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0'
 
@@ -97,5 +95,15 @@ dependencies {
     //day Picker
     implementation 'ca.antonious:materialdaypicker:0.7.4'
 
+    // for weather animation rain / snow ..
     implementation 'com.github.MatteoBattilana:WeatherView:3.0.0'
+
+    //day Picker
+    implementation 'ca.antonious:materialdaypicker:0.7.4'
+
+    //Gson
+    implementation 'com.google.code.gson:gson:2.8.9'
+    //custom dialog
+    def matieral_dialogs_version = "3.1.0"
+    implementation "com.afollestad.material-dialogs:core:$matieral_dialogs_version"
 }

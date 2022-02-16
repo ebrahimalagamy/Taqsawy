@@ -5,13 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hema.taqsawy.R
 import com.hema.taqsawy.adapter.FavoriteAdapter
 import com.hema.taqsawy.data.db.favoritePlacesModel.FavoriteModel
 import com.hema.taqsawy.databinding.FragmentFavoriteBinding
+import com.hema.taqsawy.internal.Constants.Companion.ACCESS_TOKEN
 import com.hema.taqsawy.providers.SharedPreferencesProvider
 import com.hema.taqsawy.ui.favorite.favoriteDetails.FavoriteDetailsActivity
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
@@ -20,18 +23,16 @@ import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceSelectionListene
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-
 class FavoriteFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoriteBinding
     private var placesList = mutableListOf<FavoriteModel>()
     private lateinit var favoriteAdapter: FavoriteAdapter
     private lateinit var favoriteViewModel: FavoriteViewModel
-    private lateinit var intent: Intent
     private var latDecimal: BigDecimal? = null
     private var lonDecimal: BigDecimal? = null
     private lateinit var address: String
-    private lateinit var sharedPref: SharedPreferencesProvider
+    private lateinit var sharedPreference: SharedPreferencesProvider
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -43,17 +44,26 @@ class FavoriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPref = SharedPreferencesProvider(requireContext())
+        sharedPreference = SharedPreferencesProvider(requireContext())
         favoriteViewModel = ViewModelProvider(this)[FavoriteViewModel::class.java]
+
         binding.fabAddPlaces.setOnClickListener {
             showAutoCompleteBar()
             binding.tvAddLocations.visibility = View.GONE
         }
 
-        //update RecyclerView
+        bindRecycler()
+
+        favoriteViewModel.getWeatherFromFavorite(latDecimal.toString(), lonDecimal.toString())
+
+    }
+
+    private fun bindRecycler() {
         favoriteViewModel.fetchFavorite().observe(viewLifecycleOwner) {
+
             placesList = it as MutableList<FavoriteModel>
             favoriteAdapter = FavoriteAdapter(placesList, favoriteViewModel)
+
             binding.recyclerView.adapter = favoriteAdapter
             binding.recyclerView.layoutManager =
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -62,30 +72,32 @@ class FavoriteFragment : Fragment() {
             if (it.isEmpty()) {
                 binding.tvAddLocations.visibility = View.VISIBLE
             }
+
+            favoriteAdapter.setOnItemClickListener(object : FavoriteAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    Toast.makeText(requireActivity(), "you clicked $position", Toast.LENGTH_SHORT)
+                    val intent = Intent(requireActivity(), FavoriteDetailsActivity::class.java)
+                    favoriteViewModel.getNavigation().observe(viewLifecycleOwner,object :Observer<List<String>>{
+                        override fun onChanged(it: List<String>?) {
+                            sharedPreference.setLatLongFav(it?.get(0), it?.get(1))
+                            intent.putExtra("lat", it?.get(0))
+                            intent.putExtra("lng", it?.get(1))
+                            startActivity(intent)
+                            favoriteViewModel.getNavigation().removeObserver(this)
+                        }
+
+                    })
+                }
+            })
         }
 
-        // fetch weather data when click to search item
-        favoriteViewModel.getWeatherFromFavorite(latDecimal.toString(), lonDecimal.toString())
-
-        // intent to details activity when click to item
-        intent = Intent(activity, FavoriteDetailsActivity::class.java)
-        favoriteViewModel.getNavigation().observe(viewLifecycleOwner) {
-            //it = placesList item clicked data --> [lat,lng] in favoriteAdapter
-            if (it != null) {
-
-                sharedPref.setLatLongFav(it[0], it[1])
-                intent.putExtra("lat", it[0])
-                intent.putExtra("lng", it[1])
-                activity?.startActivity(intent)
-            }
-        }
     }
 
     private fun showAutoCompleteBar() {
 
         binding.placeAutoCompleteFrag.visibility = View.VISIBLE
         val autocompleteFragment =
-            PlaceAutocompleteFragment.newInstance("pk.eyJ1IjoibW9oYW1lZHlvdXNzZWYxOTk5MiIsImEiOiJja2xsZGFxOTQzbDNwMnZzODVya3kyZWk3In0.u6G62r1JYlNDwCZxEdDrrA")
+            PlaceAutocompleteFragment.newInstance(ACCESS_TOKEN)
         val transaction = activity?.supportFragmentManager?.beginTransaction()
         transaction?.add(
             R.id.place_autoComplete_Frag,
@@ -93,7 +105,6 @@ class FavoriteFragment : Fragment() {
             "AUTOCOMPLETE_FRAGMENT_TAG"
         )
         transaction?.commit()
-
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(carmenFeature: CarmenFeature) {
 

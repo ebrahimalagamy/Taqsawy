@@ -11,7 +11,6 @@ import com.hema.taqsawy.data.repository.Repository
 class FavoriteViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: Repository = Repository(application)
-
     private val navigate = MutableLiveData<List<String>>()
 
 
@@ -29,7 +28,7 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun fetchFavorite(): LiveData<List<FavoriteModel>> {
-        return repository.retriveFavoritePlaces()
+        return repository.fetchFavoritePlaces()
     }
 
     fun deleteItem(lat: String, lng: String) {

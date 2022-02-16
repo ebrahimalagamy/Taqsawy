@@ -3,196 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:cardBackgroundColor="#6452f0"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-
-            <TextView
-                android:id="@+id/tvAlarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:gravity="center_vertical"
-                android:text="@string/alarm"
-                android:textColor="@android:color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageView
-                android:id="@+id/imgAlarm"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="156dp"
-                android:src="@drawable/alarm"
-                app:layout_constraintBottom_toBottomOf="@+id/tvAlarm"
-                app:layout_constraintStart_toEndOf="@+id/tvAlarm"
-                app:layout_constraintTop_toTopOf="@+id/tvAlarm"
-                app:layout_constraintVertical_bias="0.285" />
-
-            <Switch
-                android:id="@+id/alarmCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_marginStart="13dp"
-                android:backgroundTint="#3C000000"
-                android:checked="true"
-                android:hapticFeedbackEnabled="false"
-                android:textColorHighlight="#D51111"
-                android:textColorLink="#D32F2F"
-                app:layout_constraintBottom_toBottomOf="@+id/imgAlarm"
-                app:layout_constraintStart_toEndOf="@+id/imgAlarm"
-                app:layout_constraintTop_toTopOf="@+id/imgAlarm"
-                app:layout_constraintVertical_bias="0.0"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-            <LinearLayout
-                android:id="@+id/checkEventLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="16dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/alarmCheck"
-                app:layout_constraintHorizontal_bias="0.142"
-                app:layout_constraintStart_toStartOf="@+id/tvAlarm"
-                app:layout_constraintTop_toBottomOf="@+id/tvAlarm">
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginEnd="10dp"
-                        android:text="@string/check_events_at"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/checkEventTimeTextInput"
-                        android:layout_width="130dp"
-                        android:layout_height="45dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginEnd="5dp"
-                        android:background="@drawable/rounded_edittext"
-                        android:clickable="true"
-                        android:drawableStart="@drawable/time"
-                        android:drawablePadding="20dp"
-                        android:editable="false"
-                        android:hint="@string/time"
-                        android:paddingStart="10dp"
-                        android:textColor="#6452f0"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-            <RadioGroup
-                android:id="@+id/fornextradioGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/checkEventLayout"
-                app:layout_constraintTop_toBottomOf="@+id/checkEventLayout">
-
-                <RadioButton
-                    android:id="@+id/R24hr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:checked="true"
-                    android:text="@string/_24hr"
-                    android:textColor="#ffffff" />
-
-                <RadioButton
-                    android:id="@+id/R48hr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:text="@string/_48hr"
-                    android:textColor="#ffffff" />
-
-                <RadioButton
-                    android:id="@+id/R72hr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_72hr"
-                    android:textColor="#ffffff" />
-            </RadioGroup>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.cardview.widget.CardView>
+    android:layout_height="match_parent">
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvListWeatherHome"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:id="@+id/recycler_alarms"
+        android:layout_width="409dp"
+        android:layout_height="729dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAlarm"
+        android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="5dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/rvListWeatherHome"
-        app:layout_constraintEnd_toEndOf="parent" />
-
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_baseline_add_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,9 +11,16 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var currentWeatherLiveData: LiveData<CurrentWeatherModel>
     var repository: Repository = Repository(application)
 
-    fun getWeather(): LiveData<CurrentWeatherModel> {
+    fun setData(lat: String, long: String, lang: String, unit_: String) {
+        repository.setinfo(lat, long, lang, unit_)
         currentWeatherLiveData = repository.fetchData()
-        return currentWeatherLiveData
+    }
+
+    fun getWeather(): LiveData<CurrentWeatherModel>? {
+        if (::currentWeatherLiveData.isInitialized) {
+            return currentWeatherLiveData
+        } else
+            return null
     }
 
 

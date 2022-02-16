@@ -7,6 +7,9 @@
     <color name="green">#008643</color>
     <color name="orange">#ff9045</color>
     <color name="colorWhite">#fff</color>
+    <color name="black">#000</color>
+    <color name="BackGround">#323232</color>
+
 
 
 </resources>

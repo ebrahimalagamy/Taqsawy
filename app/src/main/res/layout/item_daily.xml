@@ -36,7 +36,9 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center">
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/iconTemp"
@@ -49,27 +51,36 @@
 
 
         <LinearLayout
+
             android:id="@+id/linearLayout5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+            <TextView
+                android:id="@+id/tvDailyTempMin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="start"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:alpha=".5"
+                android:layout_marginEnd="15dp"
+                />
 
             <TextView
-                android:id="@+id/dailytvtemp"
+                android:id="@+id/tvDailyTemMax"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:gravity="center_vertical"
-                android:text="@string/Temp"
+                android:gravity="end"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="20dp"
-                app:lottie_rawRes="@raw/temp" />
+                android:layout_gravity="center_vertical"/>
 
         </LinearLayout>
 
