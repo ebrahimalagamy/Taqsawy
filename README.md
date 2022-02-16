@@ -7,9 +7,9 @@
 ### III- User can add weather alert to warning about the weather
 
 ### Technologies:
--Kotlin
--Navigation Component
--MVVM Architecture.
+### -Kotlin
+### -Navigation Component
+### -MVVM Architecture.
 -Coroutine
 -Room database for caching
 -Retrofit (Open weather map API)
