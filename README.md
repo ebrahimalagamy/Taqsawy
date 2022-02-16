@@ -10,13 +10,13 @@
 ### -Kotlin
 ### -Navigation Component
 ### -MVVM Architecture.
--Coroutine
--Room database for caching
--Retrofit (Open weather map API)
--view binding
--Shared preference 
--LiveData
--AutoComplete places
--Preferences screen for setting
--Lottie Animation
+### -Coroutine
+### -Room database for caching
+### -Retrofit (Open weather map API)
+### -view binding
+### -Shared preference 
+### -LiveData
+### -AutoComplete places
+### -Preferences screen for setting
+### -Lottie Animation
 ============
