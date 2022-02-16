@@ -51,9 +51,6 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var address: String
     private lateinit var weather: PrecipType
-//    private lateinit var lat:String
-//    private lateinit var log:String
-
     override fun onStart() {
         super.onStart()
         sharedPref = SharedPreferencesProvider(requireActivity())
@@ -287,8 +284,6 @@ class HomeFragment : Fragment() {
             val lonDecimal = BigDecimal(location.longitude).setScale(4, RoundingMode.HALF_DOWN)
             val latDecimal = BigDecimal(location.latitude).setScale(4, RoundingMode.HALF_DOWN)
             sharedPref.setLatLong("$latDecimal", "$lonDecimal")
-//            lat=latDecimal.toString()
-//            log=lonDecimal.toString()
         }
     }
 
