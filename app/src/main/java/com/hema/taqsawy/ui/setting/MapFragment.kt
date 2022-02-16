@@ -55,7 +55,6 @@ class MapFragment : Fragment() {
                 ?.addToBackStack("homeFragment")
                 ?.commit()
 
-
         }
 
 

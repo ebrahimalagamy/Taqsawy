@@ -120,7 +120,7 @@
     <string name="useDeviceLocation">Use Device Location</string>
     <string name="allowWeatherToGetYourLocation">Allow Application to get your location</string>
     <string name="locationFromWhichWeatherIsDisplayed">Get location from map</string>
-    <string name="offline"> please check your internet connection to be able to choose a location</string>
+    <string name="offline">Please check your internet connection</string>
 
 
 
