@@ -22,6 +22,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -31,6 +32,7 @@ import com.google.android.gms.location.*
 import com.hema.taqsawy.R
 import com.hema.taqsawy.adapter.DailyAdapter
 import com.hema.taqsawy.adapter.HourlyAdapter
+import com.hema.taqsawy.data.db.weatherModel.CurrentWeatherModel
 import com.hema.taqsawy.data.network.response.DailyItem
 import com.hema.taqsawy.data.network.response.HourlyItem
 import com.hema.taqsawy.databinding.FragmentHomeBinding
@@ -47,10 +49,13 @@ class HomeFragment : Fragment() {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var sharedPref: SharedPreferencesProvider
     private lateinit var hourlyAdapter: HourlyAdapter
-    private lateinit var viewModel: HomeViewModel
+        private lateinit var viewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
     private lateinit var address: String
     private lateinit var weather: PrecipType
+//    private lateinit var lat:String
+//    private lateinit var log:String
+
     override fun onStart() {
         super.onStart()
         sharedPref = SharedPreferencesProvider(requireActivity())
@@ -146,79 +151,94 @@ class HomeFragment : Fragment() {
         sharedPref = SharedPreferencesProvider(requireActivity())
         getLatestLocation()
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        bindUi()
+        viewModel.getState().observe(viewLifecycleOwner){
+            if (it){
+                viewModel.getData()
+                bindUi()}
+        }
+
+
+
+
 
     }
 
     private fun bindUi() {
-        viewModel.getWeather().observe(viewLifecycleOwner) {
-            if (it != null) {
-                val daily: List<DailyItem?>? = it.daily
-                dailyAdapter = DailyAdapter(requireActivity(), daily)
-                binding.rvDailyWeather.adapter = dailyAdapter
-                binding.rvDailyWeather.layoutManager =
-                    LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                binding.rvDailyWeather.setHasFixedSize(true)
-                dailyAdapter?.notifyDataSetChanged()
+        viewModel.getWeather()?.observe(viewLifecycleOwner,object:Observer<CurrentWeatherModel>{
+            override fun onChanged(it: CurrentWeatherModel?) {
+                if (it != null ) {
+                    val daily: List<DailyItem?>? = it.daily
+                    dailyAdapter = DailyAdapter(requireActivity(), daily)
+                    binding.rvDailyWeather.adapter = dailyAdapter
+                    binding.rvDailyWeather.layoutManager =
+                        LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                    binding.rvDailyWeather.setHasFixedSize(true)
+                    dailyAdapter?.notifyDataSetChanged()
 
-                binding.progressbar.visibility = View.GONE
+                    binding.progressbar.visibility = View.GONE
 //                binding.tvCheckInternet.visibility = View.GONE
-                val hourly: List<HourlyItem?>? = it.hourly
-                hourlyAdapter = HourlyAdapter(requireContext(), hourly)
-                binding.rvListWeatherHome.adapter = hourlyAdapter
-                binding.rvListWeatherHome.layoutManager =
-                    LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-                binding.rvListWeatherHome.setHasFixedSize(true)
-                hourlyAdapter?.notifyDataSetChanged()
+                    val hourly: List<HourlyItem?>? = it.hourly
+                    hourlyAdapter = HourlyAdapter(requireContext(), hourly)
+                    binding.rvListWeatherHome.adapter = hourlyAdapter
+                    binding.rvListWeatherHome.layoutManager =
+                        LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+                    binding.rvListWeatherHome.setHasFixedSize(true)
+                    hourlyAdapter?.notifyDataSetChanged()
 
-                val geocoderAddress =
-                    Geocoder(requireContext(), Locale(sharedPref.getLanguage.toString()))
+                    val geocoderAddress =
+                        Geocoder(requireContext(), Locale(sharedPref.getLanguage.toString()))
 
-                try {
-                    if (sharedPref.getLanguage.toString() == "ar") {
-                        address = geocoderAddress.getFromLocation(it.lat, it.lon, 1)[0].countryName
-                            ?: it.timezone.toString()
-                    } else {
-                        address = geocoderAddress.getFromLocation(it.lat, it.lon, 1)[0].adminArea
-                            ?: it.timezone.toString()
-                        address += ",${
-                            geocoderAddress.getFromLocation(
-                                it.lat,
-                                it.lon,
-                                1
-                            )[0].countryName ?: it.timezone.toString()
-                        }"
+                    try {
+                        if (sharedPref.getLanguage.toString() == "ar") {
+                            address = geocoderAddress.getFromLocation(it.lat, it.lon, 1)[0].countryName
+                                ?: it.timezone.toString()
+                        } else {
+                            address = geocoderAddress.getFromLocation(it.lat, it.lon, 1)[0].adminArea
+                                ?: it.timezone.toString()
+                            address += ",${
+                                geocoderAddress.getFromLocation(
+                                    it.lat,
+                                    it.lon,
+                                    1
+                                )[0].countryName ?: it.timezone.toString()
+                            }"
+                        }
+                        binding.location.text = address
+                    } catch (e: IOException) {
+                        e.printStackTrace()
                     }
 
-                } catch (e: IOException) {
-                    e.printStackTrace()
+                    binding.tvTemp.text =
+                        String.format(
+                            Locale.getDefault(),
+                            "%.0f°${UnitSystem.tempUnit}",
+                            it.current?.temp
+                        )
+
+                    binding.tvWeatherDescription.text =
+                        it.current?.weather?.get(0)?.description.toString()
+                    binding.windSpeedTxt.text = it.current?.windSpeed.toString()
+                    binding.windSpeedTxtUnit.text = UnitSystem.WindSpeedUnit
+                    binding.humidityTxt.text = it.current?.humidity.toString() + " %"
+                    binding.pressure.text = it.current?.pressure.toString()
+                    binding.clouds.text = it.current?.clouds.toString() + " %"
+                    binding.tempMax.text = daily?.get(0)?.temp?.max?.toInt().toString().plus("°")
+                    binding.tempMin.text = daily?.get(0)?.temp?.min?.toInt().toString().plus("°")
+                    viewModel.getWeather()!!.removeObserver(this)
+
+                }else {
+                    binding.progressbar.visibility = View.VISIBLE
+                    //  binding.tvCheckInternet.visibility = View.VISIBLE
+
+
                 }
-
-                binding.tvTemp.text =
-                    String.format(
-                        Locale.getDefault(),
-                        "%.0f°${UnitSystem.tempUnit}",
-                        it.current?.temp
-                    )
-                binding.location.text = address
-                binding.tvWeatherDescription.text =
-                    it.current?.weather?.get(0)?.description.toString()
-                binding.windSpeedTxt.text = it.current?.windSpeed.toString()
-                binding.windSpeedTxtUnit.text = UnitSystem.WindSpeedUnit
-                binding.humidityTxt.text = it.current?.humidity.toString() + " %"
-                binding.pressure.text = it.current?.pressure.toString()
-                binding.clouds.text = it.current?.clouds.toString() + " %"
-                binding.tempMax.text = daily?.get(0)?.temp?.max?.toInt().toString().plus("°")
-                binding.tempMin.text = daily?.get(0)?.temp?.min?.toInt().toString().plus("°")
-
-            } else {
-                binding.progressbar.visibility = View.VISIBLE
-                //  binding.tvCheckInternet.visibility = View.VISIBLE
-
-
             }
+
         }
+        )
     }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -284,16 +304,21 @@ class HomeFragment : Fragment() {
             val lonDecimal = BigDecimal(location.longitude).setScale(4, RoundingMode.HALF_DOWN)
             val latDecimal = BigDecimal(location.latitude).setScale(4, RoundingMode.HALF_DOWN)
             sharedPref.setLatLong("$latDecimal", "$lonDecimal")
+
+            viewModel.setData(latDecimal.toString(),lonDecimal.toString())
+
+//            lat=latDecimal.toString()
+//            log=lonDecimal.toString()
         }
     }
 
     private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            requireActivity(), arrayOf(
+        requestPermissions(
+            arrayOf(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ),
-            1
+            PERMISSION_ID
         )
     }
 

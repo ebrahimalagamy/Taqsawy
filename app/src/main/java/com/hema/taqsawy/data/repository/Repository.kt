@@ -23,18 +23,18 @@ class Repository(private val application: Application) {
     private val localFavoriteDB = ForecastDatabase.getInstance(application).favoriteDao()
 
     private var sharedPref: SharedPreferencesProvider = SharedPreferencesProvider(application)
+
     private val latLong = sharedPref.latLong
-    private val latPref = latLong[0].toString()
-    private val lngPref = latLong[1].toString()
-    private val language = sharedPref.getLanguage.toString()
-    private val unit = sharedPref.getUnit.toString()
+    private var latPref: String = latLong[0].toString()
+    private var lngPref: String = latLong[1].toString()
+    private var language: String = sharedPref.getLanguage.toString()
+    private var unit: String = sharedPref.getUnit.toString()
 
     fun fetchData(): LiveData<CurrentWeatherModel> {
         val exceptionHandlerException = CoroutineExceptionHandler { _, _: Throwable ->
 
         }
         CoroutineScope(Dispatchers.IO + exceptionHandlerException).launch {
-
             if (unit == "imperial") {
                 UnitSystem.tempUnit = application.getString(R.string.Feherinhite)
                 UnitSystem.WindSpeedUnit = application.getString(R.string.mileshr)
@@ -45,13 +45,12 @@ class Repository(private val application: Application) {
             val response = RetrofitInstance.getWeatherService().getCurrentWeather(
                 latPref, lngPref, "minutely", unit, language, API_KEY
             )
-            Log.e("dsdasd",latPref+"kkk"+lngPref)
 
             if (response.isSuccessful) {
-                Log.e("Repository","success")
+                Log.e("Repository", "success")
                 localWeatherDB.insert(response.body())
             } else {
-                Log.e("Repository","failure of api call "+response.message())
+                Log.e("Repository", "failure of api call " + response.message())
 
             }
         }
@@ -71,6 +70,13 @@ class Repository(private val application: Application) {
             }
         }
         return localWeatherDB.getAll(favLat, favLng)
+    }
+
+    fun setinfo(lat: String, long: String) {
+
+        latPref = lat
+        lngPref = long
+
     }
 
     fun insertFavoritePlaces(favoriteModel: FavoriteModel) {
