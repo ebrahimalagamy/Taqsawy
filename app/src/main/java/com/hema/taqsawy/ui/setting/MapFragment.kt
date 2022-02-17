@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
@@ -14,6 +15,7 @@ import com.hema.taqsawy.data.network.Connectivity
 import com.hema.taqsawy.databinding.FragmentMapBinding
 import com.hema.taqsawy.providers.SharedPreferencesProvider
 import com.hema.taqsawy.ui.weather.HomeFragment
+import com.hema.taqsawy.ui.weather.HomeViewModel
 
 class MapFragment : Fragment() {
 
@@ -22,6 +24,9 @@ class MapFragment : Fragment() {
     private var markerLong: Double = 0.0
     lateinit var binding: FragmentMapBinding
     private lateinit var sharedPref: SharedPreferencesProvider
+    private lateinit var viewModel: HomeViewModel
+
+
 
 
     override fun onCreateView(
@@ -34,7 +39,9 @@ class MapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         sharedPref = SharedPreferencesProvider(requireActivity())
+
 
 
         binding.openLocation.setOnClickListener {
@@ -45,7 +52,8 @@ class MapFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            sharedPref.setLatLong(markerLat.toString(), markerLong.toString())
+            viewModel.setData(markerLat.toString(), markerLong.toString())
+//            sharedPref.setLatLong(markerLat.toString(), markerLong.toString())
             Log.e("locatiomd", markerLat.toString() + "ff" + markerLong.toString())
 
             val customLocationMapFragment = HomeFragment()

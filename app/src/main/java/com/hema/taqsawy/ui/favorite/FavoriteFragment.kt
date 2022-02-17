@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hema.taqsawy.R
@@ -52,9 +53,7 @@ class FavoriteFragment : Fragment() {
         }
 
         bindRecycler()
-
         favoriteViewModel.getWeatherFromFavorite(latDecimal.toString(), lonDecimal.toString())
-
     }
 
     private fun bindRecycler() {
@@ -76,12 +75,17 @@ class FavoriteFragment : Fragment() {
                 override fun onItemClick(position: Int) {
                     Toast.makeText(requireActivity(), "you clicked $position", Toast.LENGTH_SHORT)
                     val intent = Intent(requireActivity(), FavoriteDetailsActivity::class.java)
-                    favoriteViewModel.getNavigation().observe(viewLifecycleOwner) { it ->
-                        sharedPreference.setLatLongFav(it[0], it[1])
-                        intent.putExtra("lat", it[0])
-                        intent.putExtra("lng", it[1])
-                       startActivity(intent)
-                    }
+                    favoriteViewModel.getNavigation()
+                        .observe(viewLifecycleOwner, object : Observer<List<String>> {
+                            override fun onChanged(it: List<String>?) {
+                                sharedPreference.setLatLongFav(it?.get(0), it?.get(1))
+                                intent.putExtra("lat", it?.get(0))
+                                intent.putExtra("lng", it?.get(1))
+                                startActivity(intent)
+                                favoriteViewModel.getNavigation().removeObserver(this)
+                            }
+
+                        })
                 }
             })
         }

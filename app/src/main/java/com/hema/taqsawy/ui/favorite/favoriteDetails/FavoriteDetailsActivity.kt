@@ -39,6 +39,11 @@ class FavoriteDetailsActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
     private fun bindUi() {
         sharedPref = SharedPreferencesProvider(this)
         val lat = intent.getStringExtra("lat")

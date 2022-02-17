@@ -2,6 +2,11 @@ package com.hema.taqsawy.providers
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.hema.taqsawy.data.alarmModel.AlarmModel
+import java.lang.reflect.Type
+import java.util.ArrayList
 
 class SharedPreferencesProvider(context: Context) {
 
@@ -83,6 +88,32 @@ class SharedPreferencesProvider(context: Context) {
         editor.putString(LAT_SHARED_PREF_FAV, latitude)
         editor.putString(LONG_SHARED_PREF_FAV, longitude)
         editor.commit()
+    }
+    fun <T> setList(key: String?, list: ArrayList<T>?) {
+        val gson = Gson()
+        val json: String = gson.toJson(list)
+        set(key, json)
+    }
+
+    operator fun set(key: String?, value: String?) {
+        if (pref != null) {
+            val prefsEditor: SharedPreferences.Editor = editor
+            prefsEditor.putString(key, value)
+            prefsEditor.commit()
+        }
+    }
+    fun getModelList(key: String?): ArrayList<AlarmModel>? {
+        if (pref != null) {
+            val gson = Gson()
+            val companyList: ArrayList<AlarmModel>
+            val string: String = pref.getString(key, null).toString()
+            if (string != "null") {
+                val type: Type = object : TypeToken<ArrayList<AlarmModel?>?>() {}.type
+                companyList = gson.fromJson<ArrayList<AlarmModel>>(string, type)
+                return companyList
+            }
+        }
+        return null
     }
 
 }
